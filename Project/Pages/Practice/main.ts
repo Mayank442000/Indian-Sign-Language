@@ -74,7 +74,7 @@ const predCallBack = (predData: predDataTyp) => {
 };
 
 const updateChange = () => {
-    console.log("char changed");
+    console.log("char changed", selectedSign);
     ModleHandle.setLetter(selectedSign);
 };
 

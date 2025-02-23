@@ -281,25 +281,33 @@ const logMediapipGLOBAL = () => {
 };
 
 const getPoseHandsMoving = async () => {
-    for (let i = 0; i < 5; ++i) {
-        try {
-            console.log("Trying to initialize Pose & Hands for : ", i, " time");
-            await Promise.all([hands.initialize(), pose.initialize()]);
-            break;
-        } catch {}
-    }
+    try {
+        console.log("Trying to initialize Pose & Hands for : ", i, " time");
+        await Promise.all([hands.initialize(), pose.initialize()]);
+    } catch {}
+    // for (let i = 0; i < 5; ++i) {
+    //     try {
+    //         console.log("Trying to initialize Pose & Hands for : ", i, " time");
+    //         await Promise.all([hands.initialize(), pose.initialize()]);
+    //         break;
+    //     } catch {}
+    // }
     // let psuedoImgData = { image: GLOBAL.rawCamVid };
     let psuedoImgData = { image: dc.createElement("canvas") };
     psuedoImgData.image.width = 1280;
     psuedoImgData.image.height = 720;
-    for (let i = 0; i < 5; ++i) {
-        await sleep(150);
-        try {
-            console.log("Trying to set Pose & Hands for : ", i, " time");
-            console.log(await Promise.all([hands.send(psuedoImgData), pose.send(psuedoImgData)]));
-            break;
-        } catch {}
-    }
+    try {
+        console.log("Trying to set Pose & Hands for : ", i, " time");
+        console.log(await Promise.all([hands.send(psuedoImgData), pose.send(psuedoImgData)]));
+    } catch {}
+    // for (let i = 0; i < 5; ++i) {
+    //     await sleep(150);
+    //     try {
+    //         console.log("Trying to set Pose & Hands for : ", i, " time");
+    //         console.log(await Promise.all([hands.send(psuedoImgData), pose.send(psuedoImgData)]));
+    //         break;
+    //     } catch {}
+    // }
 };
 
 // printDetails();

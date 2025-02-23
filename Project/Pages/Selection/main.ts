@@ -2,6 +2,7 @@
 import { gebi, dc, setEvent, gebq } from "./../../Scripts/General/general";
 
 function load(value: number) {
+    console.log('load.chosenSignID', String(value), value)
     localStorage.setItem("chosenSignID", String(value));
     window.location.href = "./../Practice/index.html";
 }
