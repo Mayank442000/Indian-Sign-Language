@@ -1,0 +1,1765 @@
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" 
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <!-- http://wixtoolset.org/documentation/manual/v3/xsd/wix/product.html -->
+  <Product Id="E5FDBFFB-1A57-480B-88F1-B982F4FE109A" 
+           UpgradeCode="cb92711d-b374-4454-bc7d-8f0f7201fe14"
+           Name = "indian-sign-language-learning-app (Machine - MSI)"
+           Version="1.0.0.0"
+           Manufacturer="indian-sign-language-learning"
+           Language="1033">
+    <!-- Only run this installer on Windows 7 or up (or if it"s already installed, I guess) -->
+    <!-- <Condition Message="This application is only supported on Windows 7 or higher.">
+      <![CDATA[Installed OR (VersionNT >= 601)]]>
+    </Condition> -->
+    <!-- http://wixtoolset.org/documentation/manual/v3/xsd/wix/package.html -->
+    <Package InstallerVersion="405"
+             Compressed="yes"
+             Comments="Windows Installer Package"
+             Platform="x86"
+             InstallScope="perMachine"/>
+    <!-- Don't allow downgrades -->
+    <MajorUpgrade AllowSameVersionUpgrades="yes" DowngradeErrorMessage="A later version of this product is already installed. Setup will now exit."/>
+    <!-- This will hide our Uninstall entry in Apps & Features. We doing this so
+    we can write our own which we can better control. -->
+    <Property Id="ARPSYSTEMCOMPONENT" Value="1" />
+    <!-- While the MSI package is hidden in Apps & Features, it can still be queried
+    via PowerShell and other means. To differentiate we give the public entry a slightly
+    different name to make admins life easier.  -->
+    <Property Id="VisibleProductName" Value="indian-sign-language-learning-app (Machine)" />
+    <!-- Tells the package to install perUser or perMachine. In case of perUser, all
+    files will be redirected to the user profile and all registry entries to HKCU. -->
+    <Property Id="MSIINSTALLPERUSER" Secure="yes" Value="0" />
+    <!-- Overides the default install mode. It solves a problem where
+    individual packaged files that have the same version as in previous
+    installed App version will be deleted if the files are in use during
+    this upgrade. Unfortunately this causes an ICE 40 warning during linking. -->
+    <Property Id="REINSTALLMODE" Value="emus" />
+    <!-- Overrides the default reboot behavior if files are in use during the upgrade.
+    By default, this will be set to "ReallySuppress" to make sure no unexpected reboot will happpen.-->
+    <Property Id="REBOOT" Value="ReallySuppress" />
+    <!-- Installlation level to use that determines which features are installed.
+    see guides/enduser.md to check which Install Level maps to which feature that will
+    correspondingly get installed.
+    If not set, this will default to "2" (Main Feature, Launch On Login) -->
+    <Property Id="INSTALLLEVEL" Value="2" />
+    <!-- Allows to customize the Windows user group that gets access rights on
+    the install folder in cas the auto-updater is installed. User that run the App
+    must be part of that user group to be able to auto-update. -->
+    <Property Id="UPDATERUSERGROUP" Value="Users" />
+    <!-- A property to define whether the auto-updater is enabled when the
+    feature gets installed. This way the update can be installed but also be disabled
+    by overwriting the default value.  -->
+    <Property Id="AUTOUPDATEENABLED" Value="1" />
+    <!-- Necessary registry search to find the install path which is used by the
+    PurgeOnUninstall action. Since this package can be installed perUser or perMachine,
+    we have to look in both places. First successful search wins. -->
+    <Property Id="INSTALLPATH">
+      <RegistrySearch Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{E5FDBFFB-1A57-480B-88F1-B982F4FE109A}.msq"
+                      Root="HKCU" 
+                      Type="raw"
+                      Id="INSTALLPATH_REGSEARCH_HKCU"
+                      Name="InstallPath"
+                      Win64="no"/>
+      <RegistrySearch Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{E5FDBFFB-1A57-480B-88F1-B982F4FE109A}.msq"
+                      Root="HKLM" 
+                      Type="raw"
+                      Id="INSTALLPATH_REGSEARCH_HKLM"
+                      Name="InstallPath"
+                      Win64="no"/>
+    </Property>
+    <!-- Lets change the product name depending on the perUser installMode. 
+    This way the user and admins can see in which scope the MSI was installed. -->
+    <SetProperty Action="SetVisibleProductName" Id="VisibleProductName" Sequence="both" Before="AppSearch"  Value="indian-sign-language-learning-app (User)">
+      <![CDATA[MSIINSTALLPERUSER = "1"]]>
+    </SetProperty>
+    <!-- Again we give thee MSI generaten entry a slightly different name to help 
+    differentiate between the public one and the invisible one. -->
+    <SetProperty Action="SetProductName" Id="ProductName" Sequence="both" Before="AppSearch"  Value="indian-sign-language-learning-app (User - MSI)">
+      <![CDATA[MSIINSTALLPERUSER = "1"]]>
+    </SetProperty>
+
+    <Media Id="1" Cabinet="product.cab" EmbedCab="yes"/>
+
+
+
+    <!-- Step 2: Add files and directories -->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+       <!-- Installation files to %PROGRAMFILES% -->
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="APPLICATIONROOTDIRECTORY" Name="indian-sign-language-learning-app">
+          <Directory Id="__416f38db_66e4_4edb_af53_0c0e8099f747" Name="app-1.0.0">
+            <Directory Id="_locales_5348cb25_da42_4412_9422_32dbd17eb256" Name="locales">
+              <Component Id="_locales_af.pak_79918175_9e2f_470a_b2ce_b325737d281b" Guid="26f60778-acaa-4b37-aa72-3221b255e6ea" Win64="no">
+                <File Name="af.pak" Id="_locales_af.pak_79918175_9e2f_470a_b2ce_b325737d281b" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\af.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_am.pak_c1fe14cd_2b6a_4116_9c34_e4e199a9dd20" Guid="fea776a1-94a2-4727-95f5-df89d5b5aac2" Win64="no">
+                <File Name="am.pak" Id="_locales_am.pak_c1fe14cd_2b6a_4116_9c34_e4e199a9dd20" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\am.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_ar.pak_0e421559_1cb7_41ac_87ef_af58cc7f4c42" Guid="24a2e8a8-371b-4931-8b1a-4981e24024c7" Win64="no">
+                <File Name="ar.pak" Id="_locales_ar.pak_0e421559_1cb7_41ac_87ef_af58cc7f4c42" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\ar.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_bg.pak_cf38666e_a132_40a3_800e_4366e78f608e" Guid="95a7cc48-b6c4-4e21-b6a0-1611361175d1" Win64="no">
+                <File Name="bg.pak" Id="_locales_bg.pak_cf38666e_a132_40a3_800e_4366e78f608e" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\bg.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_bn.pak_525831a3_2fcb_4de7_aadb_dbb7e7610b9d" Guid="f4b676bb-1434-467c-8f5f-a0575e898c41" Win64="no">
+                <File Name="bn.pak" Id="_locales_bn.pak_525831a3_2fcb_4de7_aadb_dbb7e7610b9d" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\bn.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_ca.pak_4b1be59a_d7cd_4c9d_9364_e98e8fc33f71" Guid="3a0f808e-f217-4249-a118-d0e59b94c88e" Win64="no">
+                <File Name="ca.pak" Id="_locales_ca.pak_4b1be59a_d7cd_4c9d_9364_e98e8fc33f71" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\ca.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_cs.pak_ef219499_2347_46a6_85c9_23fa920b8b69" Guid="19ba79de-dc65-4d00-bb06-06f512c2e122" Win64="no">
+                <File Name="cs.pak" Id="_locales_cs.pak_ef219499_2347_46a6_85c9_23fa920b8b69" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\cs.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_da.pak_fa80bf7f_faef_4113_9988_53eba862191e" Guid="187f29e0-bba5-4c20-a608-2525d554e2d8" Win64="no">
+                <File Name="da.pak" Id="_locales_da.pak_fa80bf7f_faef_4113_9988_53eba862191e" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\da.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_de.pak_3e81fcaa_dfb9_4944_95f1_ee24f6cc6fde" Guid="1a1e2cf2-2939-4a95-a8b9-31c33f2866c5" Win64="no">
+                <File Name="de.pak" Id="_locales_de.pak_3e81fcaa_dfb9_4944_95f1_ee24f6cc6fde" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\de.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_el.pak_6d7c6510_4742_4cfa_a5d5_478d1b33dea6" Guid="6918509b-e597-4c23-b116-2acc61f7aa76" Win64="no">
+                <File Name="el.pak" Id="_locales_el.pak_6d7c6510_4742_4cfa_a5d5_478d1b33dea6" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\el.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_en_GB.pak_03c44493_cac5_4728_9d62_5dcba1f12366" Guid="6c628f9b-abaa-4cde-813c-9b3aa142499d" Win64="no">
+                <File Name="en-GB.pak" Id="_locales_en_GB.pak_03c44493_cac5_4728_9d62_5dcba1f12366" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\en-GB.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_en_US.pak_bf919769_e8cd_47aa_b91a_554b5e843170" Guid="1b1c3b4e-5d9c-41f4-b005-c7259425bf9c" Win64="no">
+                <File Name="en-US.pak" Id="_locales_en_US.pak_bf919769_e8cd_47aa_b91a_554b5e843170" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\en-US.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_es_419.pak_a6c76183_cbe6_45e8_975b_de04f067f9aa" Guid="91f390c4-671e-4c01-b160-64ff5e4938e0" Win64="no">
+                <File Name="es-419.pak" Id="_locales_es_419.pak_a6c76183_cbe6_45e8_975b_de04f067f9aa" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\es-419.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_es.pak_0221e02a_3aaf_49f6_b48c_3b04928c5fce" Guid="cf407484-6da7-454b-8aa2-090362e27ff0" Win64="no">
+                <File Name="es.pak" Id="_locales_es.pak_0221e02a_3aaf_49f6_b48c_3b04928c5fce" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\es.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_et.pak_38551509_7e04_45fa_9519_0e4be6ca3e81" Guid="255ef731-8c4f-424d-8a90-5db1ed1f4d60" Win64="no">
+                <File Name="et.pak" Id="_locales_et.pak_38551509_7e04_45fa_9519_0e4be6ca3e81" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\et.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_fa.pak_e79fbe08_5d2f_4bd5_9c4c_2a26e4cb9f35" Guid="ad4d77b4-e245-4d5a-bf45-1b994744bf3b" Win64="no">
+                <File Name="fa.pak" Id="_locales_fa.pak_e79fbe08_5d2f_4bd5_9c4c_2a26e4cb9f35" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\fa.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_fi.pak_54591b55_5ef8_4f4a_a2e9_be5a5b04da77" Guid="cb3e7eac-19dd-498c-9678-1526c8720608" Win64="no">
+                <File Name="fi.pak" Id="_locales_fi.pak_54591b55_5ef8_4f4a_a2e9_be5a5b04da77" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\fi.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_fil.pak_21d568eb_0b89_40da_a1b4_9054ea0fb6db" Guid="fd979518-576f-4006-be9c-30986c9cd5ca" Win64="no">
+                <File Name="fil.pak" Id="_locales_fil.pak_21d568eb_0b89_40da_a1b4_9054ea0fb6db" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\fil.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_fr.pak_98dadf4e_aacc_4fea_985b_40bd19a86469" Guid="c89f2294-17ac-4b8e-b76b-4e48eda61784" Win64="no">
+                <File Name="fr.pak" Id="_locales_fr.pak_98dadf4e_aacc_4fea_985b_40bd19a86469" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\fr.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_gu.pak_52810093_3ec8_473b_b1d2_f5754438a119" Guid="f29c512e-0f54-458f-9c56-1582e21aad88" Win64="no">
+                <File Name="gu.pak" Id="_locales_gu.pak_52810093_3ec8_473b_b1d2_f5754438a119" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\gu.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_he.pak_75157cca_a0e6_446b_9a61_88c9582e6192" Guid="f07ce139-5d53-45eb-84e3-494afb075278" Win64="no">
+                <File Name="he.pak" Id="_locales_he.pak_75157cca_a0e6_446b_9a61_88c9582e6192" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\he.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_hi.pak_39da0f81_de58_49b5_9aad_83439147ea83" Guid="6c2b4b97-c1ca-41d4-84c7-e1335dc79cfa" Win64="no">
+                <File Name="hi.pak" Id="_locales_hi.pak_39da0f81_de58_49b5_9aad_83439147ea83" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\hi.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_hr.pak_038d1f4f_8b79_4988_a0c7_8290cf5641d0" Guid="c2e5458d-d68d-4831-a9fc-214fc6de8af4" Win64="no">
+                <File Name="hr.pak" Id="_locales_hr.pak_038d1f4f_8b79_4988_a0c7_8290cf5641d0" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\hr.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_hu.pak_4d42b11a_ec37_4fbc_abdd_637ba330e983" Guid="178a61a8-d4e4-46d1-891e-ddf98aa4b7c2" Win64="no">
+                <File Name="hu.pak" Id="_locales_hu.pak_4d42b11a_ec37_4fbc_abdd_637ba330e983" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\hu.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_id.pak_1fbe8e75_fa15_4887_a2b5_c5aa26dba8c2" Guid="3bacb177-8bfc-4e90-a037-c415ed8509ca" Win64="no">
+                <File Name="id.pak" Id="_locales_id.pak_1fbe8e75_fa15_4887_a2b5_c5aa26dba8c2" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\id.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_it.pak_48758111_d3f5_412c_8e62_cf7d9296ac2f" Guid="7b925a0d-3acb-4896-9622-848e83bf1c70" Win64="no">
+                <File Name="it.pak" Id="_locales_it.pak_48758111_d3f5_412c_8e62_cf7d9296ac2f" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\it.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_ja.pak_68fccf33_8cd8_44f6_955e_7d438511ca35" Guid="0f7b4854-0847-448a-a532-618532072403" Win64="no">
+                <File Name="ja.pak" Id="_locales_ja.pak_68fccf33_8cd8_44f6_955e_7d438511ca35" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\ja.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_kn.pak_fb9ddd9d_8651_47d8_ae25_db4d8e518f6f" Guid="278ced3a-a570-4590-94bb-20977e525acd" Win64="no">
+                <File Name="kn.pak" Id="_locales_kn.pak_fb9ddd9d_8651_47d8_ae25_db4d8e518f6f" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\kn.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_ko.pak_cc61d4cf_bbd8_4571_af26_0299d2010ef2" Guid="8982d440-67b2-40e3-aa74-ac000ca751c2" Win64="no">
+                <File Name="ko.pak" Id="_locales_ko.pak_cc61d4cf_bbd8_4571_af26_0299d2010ef2" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\ko.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_lt.pak_6a10ccc5_5433_4899_8f4c_1bc9ed6e5235" Guid="4d6caa46-73b8-4b1d-a989-db7e7eeac201" Win64="no">
+                <File Name="lt.pak" Id="_locales_lt.pak_6a10ccc5_5433_4899_8f4c_1bc9ed6e5235" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\lt.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_lv.pak_eee69f8d_2e49_49cb_9801_ba103cde2366" Guid="7d70680e-a26e-4755-b616-45ac73a44106" Win64="no">
+                <File Name="lv.pak" Id="_locales_lv.pak_eee69f8d_2e49_49cb_9801_ba103cde2366" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\lv.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_ml.pak_e9e7d8b0_ec36_4d97_a0a9_b7ca16ea13a8" Guid="48e0f0aa-077c-4372-bffa-8b1a8694ce3d" Win64="no">
+                <File Name="ml.pak" Id="_locales_ml.pak_e9e7d8b0_ec36_4d97_a0a9_b7ca16ea13a8" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\ml.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_mr.pak_a8699b82_0aa2_46c1_91a2_a2db4852b9cf" Guid="ec45407e-f1f2-4407-b74a-dcbaa8b4caa6" Win64="no">
+                <File Name="mr.pak" Id="_locales_mr.pak_a8699b82_0aa2_46c1_91a2_a2db4852b9cf" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\mr.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_ms.pak_82750844_6769_4b00_9f29_cda31575cb24" Guid="08032d08-b90e-422a-bdb2-dd769e03a4b0" Win64="no">
+                <File Name="ms.pak" Id="_locales_ms.pak_82750844_6769_4b00_9f29_cda31575cb24" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\ms.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_nb.pak_ae6a3943_5f04_44da_8eaf_cdd756c1986e" Guid="66a20360-3d48-48c9-9a47-cc350966e658" Win64="no">
+                <File Name="nb.pak" Id="_locales_nb.pak_ae6a3943_5f04_44da_8eaf_cdd756c1986e" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\nb.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_nl.pak_bc55e6dd_5947_46a0_8a5d_f745df8900f9" Guid="57c065b3-5a79-4e03-970d-c671a830173a" Win64="no">
+                <File Name="nl.pak" Id="_locales_nl.pak_bc55e6dd_5947_46a0_8a5d_f745df8900f9" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\nl.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_pl.pak_2fbce212_7cf1_4a1f_8d32_ea80d4166362" Guid="0f413b9b-a315-4fd8-bce3-7a3a8d031805" Win64="no">
+                <File Name="pl.pak" Id="_locales_pl.pak_2fbce212_7cf1_4a1f_8d32_ea80d4166362" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\pl.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_pt_BR.pak_1e154f05_ee5b_4a11_a528_f9960d56cfb5" Guid="3a27aee6-790d-4303-9f0d-d68e89b7dbce" Win64="no">
+                <File Name="pt-BR.pak" Id="_locales_pt_BR.pak_1e154f05_ee5b_4a11_a528_f9960d56cfb5" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\pt-BR.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_pt_PT.pak_f62b0248_0aa5_4134_a161_204b8a343431" Guid="50437d84-cfdd-4941-be1d-ec10100ddfab" Win64="no">
+                <File Name="pt-PT.pak" Id="_locales_pt_PT.pak_f62b0248_0aa5_4134_a161_204b8a343431" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\pt-PT.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_ro.pak_2c2724f5_4b9f_463b_8533_df66c5f21176" Guid="b4a40f19-c51d-4ef1-b91e-3f7dada86687" Win64="no">
+                <File Name="ro.pak" Id="_locales_ro.pak_2c2724f5_4b9f_463b_8533_df66c5f21176" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\ro.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_ru.pak_929d32bf_97d5_4092_96cb_35805daba234" Guid="e11b86e5-fdf1-41fe-835a-844d9075662c" Win64="no">
+                <File Name="ru.pak" Id="_locales_ru.pak_929d32bf_97d5_4092_96cb_35805daba234" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\ru.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_sk.pak_28458162_7253_4458_b712_7f18bb797f72" Guid="c9c0f8e4-1df6-4199-bafa-ca5ef1becd79" Win64="no">
+                <File Name="sk.pak" Id="_locales_sk.pak_28458162_7253_4458_b712_7f18bb797f72" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\sk.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_sl.pak_c6c602b3_86a1_4d00_8c77_d99d76eb50ed" Guid="d03933b4-83e2-4bef-be63-a6833a5b2e71" Win64="no">
+                <File Name="sl.pak" Id="_locales_sl.pak_c6c602b3_86a1_4d00_8c77_d99d76eb50ed" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\sl.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_sr.pak_0049cfbe_3ac8_448a_a073_ece81bdbbd14" Guid="793c7534-22c6-473a-8570-393ff2df1f71" Win64="no">
+                <File Name="sr.pak" Id="_locales_sr.pak_0049cfbe_3ac8_448a_a073_ece81bdbbd14" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\sr.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_sv.pak_5d3927a5_711c_4607_abd0_360bbf8eb982" Guid="5e6a9def-e193-4c5e-b8c2-4877325b3aa7" Win64="no">
+                <File Name="sv.pak" Id="_locales_sv.pak_5d3927a5_711c_4607_abd0_360bbf8eb982" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\sv.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_sw.pak_294a5c02_5e73_49ca_ab5f_e47f71785ed3" Guid="b98ee47b-f262-49ac-a359-4ccd2c6ae99f" Win64="no">
+                <File Name="sw.pak" Id="_locales_sw.pak_294a5c02_5e73_49ca_ab5f_e47f71785ed3" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\sw.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_ta.pak_30dd402c_309c_447c_b534_4c5857b009e9" Guid="6331e96e-1b5d-4a77-82bd-4d6078df8a8c" Win64="no">
+                <File Name="ta.pak" Id="_locales_ta.pak_30dd402c_309c_447c_b534_4c5857b009e9" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\ta.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_te.pak_4bbc40f3_4ced_46ee_9cdc_2955b731b2e7" Guid="c6608df4-16d3-4069-8107-9816d68454c7" Win64="no">
+                <File Name="te.pak" Id="_locales_te.pak_4bbc40f3_4ced_46ee_9cdc_2955b731b2e7" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\te.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_th.pak_c6ac918e_c1b5_4936_a222_e949f9615c0c" Guid="43d2ad5c-5efd-4ffa-86d3-56022eed983f" Win64="no">
+                <File Name="th.pak" Id="_locales_th.pak_c6ac918e_c1b5_4936_a222_e949f9615c0c" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\th.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_tr.pak_61ffd315_c8a4_430a_a9af_ff5d996b775b" Guid="9079c325-946f-463e-9aed-9434a1f8a4fa" Win64="no">
+                <File Name="tr.pak" Id="_locales_tr.pak_61ffd315_c8a4_430a_a9af_ff5d996b775b" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\tr.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_uk.pak_32c3dc03_0257_45d4_a136_1dcd51f9d8b7" Guid="e64e822a-04cc-42a6-ab84-a384b7a0efe6" Win64="no">
+                <File Name="uk.pak" Id="_locales_uk.pak_32c3dc03_0257_45d4_a136_1dcd51f9d8b7" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\uk.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_ur.pak_e43b5bcc_4e0e_42aa_8e7b_3447b89808e1" Guid="268a9de0-8dc0-45b1-99ff-d0619f4732b5" Win64="no">
+                <File Name="ur.pak" Id="_locales_ur.pak_e43b5bcc_4e0e_42aa_8e7b_3447b89808e1" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\ur.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_vi.pak_60935c65_65ab_4576_9579_e9dfd0b9e713" Guid="f7e4b4f0-5d32-4003-b3ff-04e88b2b6831" Win64="no">
+                <File Name="vi.pak" Id="_locales_vi.pak_60935c65_65ab_4576_9579_e9dfd0b9e713" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\vi.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_zh_CN.pak_00120a04_7eb9_4efa_bbcf_06648e5af925" Guid="af515ad3-f94e-4859-9b10-a06954406203" Win64="no">
+                <File Name="zh-CN.pak" Id="_locales_zh_CN.pak_00120a04_7eb9_4efa_bbcf_06648e5af925" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\zh-CN.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+              <Component Id="_locales_zh_TW.pak_72ca67e6_8bc3_4644_afbc_7e6846f23872" Guid="60de82cf-41fe-4011-86a0-86f6fbe25c36" Win64="no">
+                <File Name="zh-TW.pak" Id="_locales_zh_TW.pak_72ca67e6_8bc3_4644_afbc_7e6846f23872" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\locales\zh-TW.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+              </Component>
+            </Directory>
+            <Directory Id="_resources_100c6613_c9be_489d_96d7_bab5f1a96b06" Name="resources">
+              <Directory Id="_resources_app_63b5f6c9_a268_46c2_8d7a_7a72211bcc5c" Name="app">
+                <Directory Id="_resources_app_Models_941450ce_a47c_41a8_8c32_e7e171852b57" Name="Models">
+                  <Directory Id="_resources_app_Models_Alphabets_66a182de_8676_4135_8634_361d9035d066" Name="Alphabets">
+                    <Component Id="_A.tflite_4a6f4fd7_4985_4858_888c_6a40f4e182e0" Guid="f9fe1643-8241-4a42-bc80-29a306934889" Win64="no">
+                      <File Name="A.tflite" Id="_A.tflite_4a6f4fd7_4985_4858_888c_6a40f4e182e0" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\A.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_B.tflite_8ed05519_b34a_424f_be8e_14862366571e" Guid="bac927df-27a5-499a-8af6-b1b57ddd4ed9" Win64="no">
+                      <File Name="B.tflite" Id="_B.tflite_8ed05519_b34a_424f_be8e_14862366571e" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\B.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_C.tflite_e4997279_dbfd_4949_837a_8f2a3d340e83" Guid="708d8bcc-e446-4b49-8ee6-ede77fb0cf6d" Win64="no">
+                      <File Name="C.tflite" Id="_C.tflite_e4997279_dbfd_4949_837a_8f2a3d340e83" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\C.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_D.tflite_b23a3209_b463_4fd0_99ad_2f2176a50041" Guid="0ad728ee-ae97-451f-b9e5-dcb2a261b1a4" Win64="no">
+                      <File Name="D.tflite" Id="_D.tflite_b23a3209_b463_4fd0_99ad_2f2176a50041" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\D.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_E.tflite_5ab9ec4b_307e_417b_be96_3aa66b470b81" Guid="39f0ea9a-dac2-48e8-9dca-da30c0b6351c" Win64="no">
+                      <File Name="E.tflite" Id="_E.tflite_5ab9ec4b_307e_417b_be96_3aa66b470b81" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\E.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_F.tflite_de6cbd9a_7bbd_4443_adb2_f0048bbb1d39" Guid="eaae25e9-dd8b-4c02-8edd-5636666a3dfe" Win64="no">
+                      <File Name="F.tflite" Id="_F.tflite_de6cbd9a_7bbd_4443_adb2_f0048bbb1d39" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\F.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_G.tflite_ea6ef80b_f040_46f5_bdba_439e438cb537" Guid="e604b743-3a39-454f-a231-de7954d035b6" Win64="no">
+                      <File Name="G.tflite" Id="_G.tflite_ea6ef80b_f040_46f5_bdba_439e438cb537" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\G.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_H.tflite_0e5cb1ac_72ff_442a_8377_9046e55dd513" Guid="c14700d7-f311-4e68-937f-b9480667bc8f" Win64="no">
+                      <File Name="H.tflite" Id="_H.tflite_0e5cb1ac_72ff_442a_8377_9046e55dd513" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\H.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_I.tflite_58fb5f39_36ac_482e_a656_c13b0c8238f1" Guid="e1adad37-e198-474c-b31b-3071d92e8387" Win64="no">
+                      <File Name="I.tflite" Id="_I.tflite_58fb5f39_36ac_482e_a656_c13b0c8238f1" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\I.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_J.tflite_50d509a9_3acc_4415_856d_68ce6180a25a" Guid="605f4077-6d2b-4ef0-84b4-ed7ecae7d133" Win64="no">
+                      <File Name="J.tflite" Id="_J.tflite_50d509a9_3acc_4415_856d_68ce6180a25a" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\J.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_K.tflite_c5d346e6_9213_4510_98ae_7770560c855b" Guid="fe6daa7f-8e92-49bd-b2aa-9659faba99d2" Win64="no">
+                      <File Name="K.tflite" Id="_K.tflite_c5d346e6_9213_4510_98ae_7770560c855b" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\K.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_L.tflite_025ace4c_10f1_4de1_8bec_e2d817bf1dd4" Guid="b4cd4248-26cf-47e7-93c9-2c3087a728ad" Win64="no">
+                      <File Name="L.tflite" Id="_L.tflite_025ace4c_10f1_4de1_8bec_e2d817bf1dd4" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\L.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_M.tflite_56b6cff5_cacc_4a06_b31c_c5a97b1563a2" Guid="a224bcc4-4786-43e5-85ec-73c7a712a819" Win64="no">
+                      <File Name="M.tflite" Id="_M.tflite_56b6cff5_cacc_4a06_b31c_c5a97b1563a2" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\M.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_N.tflite_57ea84f9_93fc_4e72_a7d4_df8851fc30bb" Guid="0de00560-67cb-4c7d-ab17-20eaf7bee898" Win64="no">
+                      <File Name="N.tflite" Id="_N.tflite_57ea84f9_93fc_4e72_a7d4_df8851fc30bb" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\N.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_O.tflite_335c5f82_e4ac_412a_8b00_4a06da42ad11" Guid="b7ccea97-0d7b-4d94-bbfa-fdf2f3fcfac6" Win64="no">
+                      <File Name="O.tflite" Id="_O.tflite_335c5f82_e4ac_412a_8b00_4a06da42ad11" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\O.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_P.tflite_09f9ddf8_ce16_4ffb_a02d_eb100e952f50" Guid="427d34e0-b0e3-4f45-8ef4-c8a3f517cd28" Win64="no">
+                      <File Name="P.tflite" Id="_P.tflite_09f9ddf8_ce16_4ffb_a02d_eb100e952f50" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\P.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_Q.tflite_64e72c1f_8c94_473f_be8e_07ae8f35b27b" Guid="86410c01-a9c9-40f1-aaa3-8316ea3cd7f6" Win64="no">
+                      <File Name="Q.tflite" Id="_Q.tflite_64e72c1f_8c94_473f_be8e_07ae8f35b27b" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\Q.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_R.tflite_a7d1b84e_1bd7_4a9f_90ff_0c3b7ad7acd1" Guid="4a9da265-df52-4dd2-8f36-e2ead70ca10b" Win64="no">
+                      <File Name="R.tflite" Id="_R.tflite_a7d1b84e_1bd7_4a9f_90ff_0c3b7ad7acd1" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\R.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_S.tflite_2ef53bdc_b743_44e3_aa1d_738a8325905f" Guid="eacc207f-53f7-4e64-9632-6c127717e748" Win64="no">
+                      <File Name="S.tflite" Id="_S.tflite_2ef53bdc_b743_44e3_aa1d_738a8325905f" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\S.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_T.tflite_c1372d52_24ef_4243_8d2c_06625979e5f4" Guid="f726dbf9-50d6-4abc-a2d2-62f4099d5b23" Win64="no">
+                      <File Name="T.tflite" Id="_T.tflite_c1372d52_24ef_4243_8d2c_06625979e5f4" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\T.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_U.tflite_42a351c6_ad71_4112_8153_51a7cae99b96" Guid="f41960ec-03b3-4f71-8543-21cfdfd26ced" Win64="no">
+                      <File Name="U.tflite" Id="_U.tflite_42a351c6_ad71_4112_8153_51a7cae99b96" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\U.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_V.tflite_90c13e19_3b58_46b8_8a76_0eebf679ea9a" Guid="8fcb683f-b2a9-4fc4-9128-947ed1451dc6" Win64="no">
+                      <File Name="V.tflite" Id="_V.tflite_90c13e19_3b58_46b8_8a76_0eebf679ea9a" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\V.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_W.tflite_c196a231_7211_4c0c_a102_9452e484e9f8" Guid="7baebaad-737c-4269-8b2c-1db5604e2847" Win64="no">
+                      <File Name="W.tflite" Id="_W.tflite_c196a231_7211_4c0c_a102_9452e484e9f8" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\W.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_X.tflite_1868064d_fe9e_4271_9d19_17f138eef59b" Guid="adfafcfe-e176-43be-89b1-0e16909554c0" Win64="no">
+                      <File Name="X.tflite" Id="_X.tflite_1868064d_fe9e_4271_9d19_17f138eef59b" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\X.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_Y.tflite_39039dcf_522a_4af1_b5bd_d858d2399ec2" Guid="15b26d46-f283-4319-a190-f517858f52f5" Win64="no">
+                      <File Name="Y.tflite" Id="_Y.tflite_39039dcf_522a_4af1_b5bd_d858d2399ec2" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\Y.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_Z.tflite_71ad8c97_19db_41f9_bcc2_7f5f7cf923bd" Guid="5735ad02-1374-4349-81d7-dac801b2a59f" Win64="no">
+                      <File Name="Z.tflite" Id="_Z.tflite_71ad8c97_19db_41f9_bcc2_7f5f7cf923bd" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Alphabets\Z.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                  </Directory>
+                  <Directory Id="_resources_app_Models_Numbers_11566e64_0a41_4a2e_9722_1d1b99f1bd4d" Name="Numbers">
+                    <Component Id="_0.tflite_8523a366_a09f_4a55_915d_b075d9bc6643" Guid="dcdc4688-9078-4b50-8339-368417377c19" Win64="no">
+                      <File Name="0.tflite" Id="_0.tflite_8523a366_a09f_4a55_915d_b075d9bc6643" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Numbers\0.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_1.tflite_f4634d93_b0e2_4cd7_9076_7c7fd9bfa425" Guid="75a8dd9b-4dd5-405f-a2c7-81e3ad686bfd" Win64="no">
+                      <File Name="1.tflite" Id="_1.tflite_f4634d93_b0e2_4cd7_9076_7c7fd9bfa425" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Numbers\1.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_2.tflite_8a2b01ed_6ef9_4fa0_8e99_88b60e8ef095" Guid="a80cc1d0-4390-4637-a449-a9cecdc7ac9b" Win64="no">
+                      <File Name="2.tflite" Id="_2.tflite_8a2b01ed_6ef9_4fa0_8e99_88b60e8ef095" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Numbers\2.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_3.tflite_47f4cf86_46b4_4411_9367_6cb2ed6284da" Guid="9e80abbd-128c-4415-aa43-8a81d4c4f20a" Win64="no">
+                      <File Name="3.tflite" Id="_3.tflite_47f4cf86_46b4_4411_9367_6cb2ed6284da" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Numbers\3.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_4.tflite_e32550ae_c91a_4f50_a5ae_7e48f6ca460f" Guid="2c9ef541-deeb-4cdd-af55-0f8add82d97a" Win64="no">
+                      <File Name="4.tflite" Id="_4.tflite_e32550ae_c91a_4f50_a5ae_7e48f6ca460f" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Numbers\4.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_5.tflite_7c7a6b41_3f52_40d8_9654_f6b9190d6353" Guid="5c5fabee-ea07-4b0b-a4b1-fe1d7dfda694" Win64="no">
+                      <File Name="5.tflite" Id="_5.tflite_7c7a6b41_3f52_40d8_9654_f6b9190d6353" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Numbers\5.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_6.tflite_d4748bf5_bc21_46f4_91c0_0e87fe1f963e" Guid="125f1179-a27d-4f84-8fd6-ea3c0e5ad217" Win64="no">
+                      <File Name="6.tflite" Id="_6.tflite_d4748bf5_bc21_46f4_91c0_0e87fe1f963e" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Numbers\6.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_7.tflite_23c37c9a_a5bb_4b20_8b3a_d9a78b047d4f" Guid="7960994a-4238-4e1d-af3c-4d8624c6ab04" Win64="no">
+                      <File Name="7.tflite" Id="_7.tflite_23c37c9a_a5bb_4b20_8b3a_d9a78b047d4f" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Numbers\7.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_8.tflite_b59f5e46_4e1f_4d29_bc06_0f24393a802e" Guid="86f0ea8a-cf1a-4fd4-8c3d-1443fd50ea13" Win64="no">
+                      <File Name="8.tflite" Id="_8.tflite_b59f5e46_4e1f_4d29_bc06_0f24393a802e" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Numbers\8.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_9.tflite_272aaa88_a057_43a2_a216_d4e0d0c0b64a" Guid="e93c36e5-441f-451c-82c9-af69517047b3" Win64="no">
+                      <File Name="9.tflite" Id="_9.tflite_272aaa88_a057_43a2_a216_d4e0d0c0b64a" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Numbers\9.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                  </Directory>
+                  <Directory Id="_resources_app_Models_Words_f6ce77d4_9dec_4fae_93ee_3ca767708694" Name="Words">
+                    <Component Id="__hello.tflite_ee3f974f_0ddd_44ea_a140_9e08f43eb2a4" Guid="f2225d6f-f914-4dc7-8527-095301713f92" Win64="no">
+                      <File Name="_hello.tflite" Id="__hello.tflite_ee3f974f_0ddd_44ea_a140_9e08f43eb2a4" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Words\_hello.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="__indian.tflite_1f6a29d1_bc9c_4fec_8908_841a04f82202" Guid="e106048e-58a5-4497-86b1-2516de45744d" Win64="no">
+                      <File Name="_indian.tflite" Id="__indian.tflite_1f6a29d1_bc9c_4fec_8908_841a04f82202" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Words\_indian.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="__man.tflite_49caef96_93fa_4e5b_8c3e_d5996cf5f6d1" Guid="f9259edf-ce3f-4236-a88a-4c3b93571e07" Win64="no">
+                      <File Name="_man.tflite" Id="__man.tflite_49caef96_93fa_4e5b_8c3e_d5996cf5f6d1" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Words\_man.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="__me.tflite_24644d92_ed48_4728_9ce5_e1158985f59f" Guid="9bb277d3-8b76-4261-accd-c696ed88a7c2" Win64="no">
+                      <File Name="_me.tflite" Id="__me.tflite_24644d92_ed48_4728_9ce5_e1158985f59f" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Words\_me.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="__thankyou.tflite_f39f0391_234e_48b7_af98_ecb4b34f7c25" Guid="a15160c7-c1a0-4365-a620-69406750f6f0" Win64="no">
+                      <File Name="_thankyou.tflite" Id="__thankyou.tflite_f39f0391_234e_48b7_af98_ecb4b34f7c25" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Words\_thankyou.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="__welcome.tflite_f5ba228f_cfa9_417b_95c0_92897eabfc05" Guid="65ae20af-3c16-4589-8d95-6ffec94ecd47" Win64="no">
+                      <File Name="_welcome.tflite" Id="__welcome.tflite_f5ba228f_cfa9_417b_95c0_92897eabfc05" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Words\_welcome.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="__woman.tflite_31aceb9c_296e_45ee_ab5c_c87d6475d6a9" Guid="8a9a9e9d-a597-44e9-bbac-8f7fc8c4b1ad" Win64="no">
+                      <File Name="_woman.tflite" Id="__woman.tflite_31aceb9c_296e_45ee_ab5c_c87d6475d6a9" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Words\_woman.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="__you.tflite_34d99f1f_8f05_49c3_9666_a20cea847803" Guid="eb4d0cf5-336e-4800-a7c7-eaa5c343bdb7" Win64="no">
+                      <File Name="_you.tflite" Id="__you.tflite_34d99f1f_8f05_49c3_9666_a20cea847803" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\Words\_you.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                  </Directory>                  <Component Id="_resources_app_Models_predCutOff.ts_632ac69d_51ba_48e6_bd07_8780e87625bf" Guid="46a9cef1-ab5c-4d61-9fe5-72b47a7edf4b" Win64="no">
+                    <File Name="predCutOff.ts" Id="_resources_app_Models_predCutOff.ts_632ac69d_51ba_48e6_bd07_8780e87625bf" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Models\predCutOff.ts" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                  </Component>
+                </Directory>
+
+                <Directory Id="_resources_app_Pages_6533b586_9b39_44f2_a306_f227c5b5400b" Name="Pages">
+                  <Directory Id="_resources_app_Pages_About_71e5ad6b_03a1_48fc_91ca_a835dd606996" Name="About">
+                    <Component Id="_index.html_7cb1dfb2_2d9d_41a4_b7a6_949ae806fafb" Guid="98833552-3f09-4c98-a221-f02fc0b43daa" Win64="no">
+                      <File Name="index.html" Id="_index.html_7cb1dfb2_2d9d_41a4_b7a6_949ae806fafb" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\About\index.html" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_style.css_3d6ce7c7_9fcc_4366_bac1_2fc7ffd983f7" Guid="252e2350-27ba-41ce-8a8d-6c1926115637" Win64="no">
+                      <File Name="style.css" Id="_style.css_3d6ce7c7_9fcc_4366_bac1_2fc7ffd983f7" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\About\style.css" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                  </Directory>
+                  <Directory Id="_resources_app_Pages_Home_27a3dbf0_3f9c_4a0a_b2ad_054f3a4efa78" Name="Home">
+                    <Component Id="_resources_app_Pages_Home_index.css_1b0c720e_2af0_4616_b267_65561b232124" Guid="68379cc4-e104-4e97-af26-f93301286d07" Win64="no">
+                      <File Name="index.css" Id="_resources_app_Pages_Home_index.css_1b0c720e_2af0_4616_b267_65561b232124" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\Home\index.css" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_index.html_98b72ce8_20cb_477c_8762_0977f9749e71" Guid="6aa0f651-4dd8-4015-a54c-c386956c588c" Win64="no">
+                      <File Name="index.html" Id="_index.html_98b72ce8_20cb_477c_8762_0977f9749e71" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\Home\index.html" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                  </Directory>
+                  <Directory Id="_resources_app_Pages_HowToUse_dfbee571_5f25_4295_a496_339994a2c3a3" Name="HowToUse">
+                    <Component Id="_index.html_a77f0d8b_b8ac_468b_bde7_c98f88553321" Guid="c805b9d5-7fee-4bbd-adbd-512dc83818b2" Win64="no">
+                      <File Name="index.html" Id="_index.html_a77f0d8b_b8ac_468b_bde7_c98f88553321" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\HowToUse\index.html" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_style.css_d32848b5_742b_4325_a78f_cf1ea4c50c88" Guid="fd583e08-8ef2-436d-9e7a-dfc53807b6c5" Win64="no">
+                      <File Name="style.css" Id="_style.css_d32848b5_742b_4325_a78f_cf1ea4c50c88" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\HowToUse\style.css" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                  </Directory>
+                  <Directory Id="_resources_app_Pages_Practice_46320563_6350_43e9_93bb_989c5e55379f" Name="Practice">
+                    <Component Id="_index.html_65215e51_8f63_491f_b813_d567b4d30605" Guid="6bed5d3c-f474-4dde-8f7b-42e41bdc3694" Win64="no">
+                      <File Name="index.html" Id="_index.html_65215e51_8f63_491f_b813_d567b4d30605" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\Practice\index.html" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_main.js_6eff299f_dc85_46ee_91e2_da64314f0435" Guid="d1257bc7-efdc-4416-bd90-a61ea9b7df2b" Win64="no">
+                      <File Name="main.js" Id="_main.js_6eff299f_dc85_46ee_91e2_da64314f0435" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\Practice\main.js" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_main.js.LEGAL.txt_3b8a91fd_f455_4bcf_86d7_749437d33557" Guid="e8fe726a-81d9-4f1f-b60a-f5d8e372efe2" Win64="no">
+                      <File Name="main.js.LEGAL.txt" Id="_main.js.LEGAL.txt_3b8a91fd_f455_4bcf_86d7_749437d33557" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\Practice\main.js.LEGAL.txt" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_main.js.map_dd955238_be85_4333_bacf_a3c7c5ef4dff" Guid="25b0ba35-accd-4940-9bf7-9a1c22bdf06b" Win64="no">
+                      <File Name="main.js.map" Id="_main.js.map_dd955238_be85_4333_bacf_a3c7c5ef4dff" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\Practice\main.js.map" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_practice.css_a690613d_8aeb_44e7_8ffc_2b829e48054d" Guid="f8e8b328-28d5-488d-9c19-b03c978c88ef" Win64="no">
+                      <File Name="practice.css" Id="_practice.css_a690613d_8aeb_44e7_8ffc_2b829e48054d" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\Practice\practice.css" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_tflite_web_api_cc.wasm_5a20bbc5_8bb0_467f_9589_8b4338bcf1dc" Guid="7611182b-3950-483f-9441-54d01693870c" Win64="no">
+                      <File Name="tflite_web_api_cc.wasm" Id="_tflite_web_api_cc.wasm_5a20bbc5_8bb0_467f_9589_8b4338bcf1dc" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\Practice\tflite_web_api_cc.wasm" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_tflite_web_api_cc_simd.js_5801af75_3ff8_4371_bf1d_562ad3a74a43" Guid="36ccaff5-a9c3-42c2-ba93-aa034e83b85e" Win64="no">
+                      <File Name="tflite_web_api_cc_simd.js" Id="_tflite_web_api_cc_simd.js_5801af75_3ff8_4371_bf1d_562ad3a74a43" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\Practice\tflite_web_api_cc_simd.js" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_tflite_web_api_cc_simd.wasm_3f1dc0e2_9dff_481d_9bb9_2a2a4a98ba6c" Guid="fb7d2018-8c7b-4ef5-a0bf-124b38e71e29" Win64="no">
+                      <File Name="tflite_web_api_cc_simd.wasm" Id="_tflite_web_api_cc_simd.wasm_3f1dc0e2_9dff_481d_9bb9_2a2a4a98ba6c" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\Practice\tflite_web_api_cc_simd.wasm" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_tflite_web_api_cc_simd_threaded.js_0b01810a_c72e_4c82_8d11_ca7cb97b6fcd" Guid="6bc808be-9377-4ecc-9200-f81a0a482248" Win64="no">
+                      <File Name="tflite_web_api_cc_simd_threaded.js" Id="_tflite_web_api_cc_simd_threaded.js_0b01810a_c72e_4c82_8d11_ca7cb97b6fcd" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\Practice\tflite_web_api_cc_simd_threaded.js" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_tflite_web_api_cc_simd_threaded.wa_54bfdb6b_a9cf_4ffe_9188_99b4aaefd84b" Guid="01bb31c2-1a48-4936-aa21-c38d11c23605" Win64="no">
+                      <File Name="tflite_web_api_cc_simd_threaded.wasm" Id="_tflite_web_api_cc_simd_threaded.wa_54bfdb6b_a9cf_4ffe_9188_99b4aaefd84b" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\Practice\tflite_web_api_cc_simd_threaded.wasm" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_tflite_web_api_cc_simd_threaded.wo_f5583a10_ca29_4e55_aa67_47db04215ef5" Guid="27a4ddfd-73e9-4229-9c75-db204e6b98cf" Win64="no">
+                      <File Name="tflite_web_api_cc_simd_threaded.worker.js" Id="_tflite_web_api_cc_simd_threaded.wo_f5583a10_ca29_4e55_aa67_47db04215ef5" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\Practice\tflite_web_api_cc_simd_threaded.worker.js" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_tflite_web_api_cc_threaded.js_fa506102_c30d_4476_b815_1e661c1dfb16" Guid="d9510a9f-2265-4384-9ef7-853f1f38d24d" Win64="no">
+                      <File Name="tflite_web_api_cc_threaded.js" Id="_tflite_web_api_cc_threaded.js_fa506102_c30d_4476_b815_1e661c1dfb16" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\Practice\tflite_web_api_cc_threaded.js" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_tflite_web_api_cc_threaded.wasm_425bfcf2_1786_4458_8388_a97f8c0c8ba2" Guid="651d02ce-8adb-4625-bb02-83e231929ac9" Win64="no">
+                      <File Name="tflite_web_api_cc_threaded.wasm" Id="_tflite_web_api_cc_threaded.wasm_425bfcf2_1786_4458_8388_a97f8c0c8ba2" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\Practice\tflite_web_api_cc_threaded.wasm" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_tflite_web_api_cc_threaded.worker._5b994f4c_e058_4854_b635_02e6db16c141" Guid="4a8c3197-8afe-4e5c-a6ef-6fc9a1eae6cb" Win64="no">
+                      <File Name="tflite_web_api_cc_threaded.worker.js" Id="_tflite_web_api_cc_threaded.worker._5b994f4c_e058_4854_b635_02e6db16c141" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\Practice\tflite_web_api_cc_threaded.worker.js" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                  </Directory>
+                  <Directory Id="_resources_app_Pages_Selection_46e4e236_2c22_45f3_9aeb_65b3a6fffd85" Name="Selection">
+                    <Component Id="_index.html_00a57eee_936a_4eff_874b_a810b5e109f7" Guid="277d2b7b-0daf-47d8-b891-21bbdb69d30a" Win64="no">
+                      <File Name="index.html" Id="_index.html_00a57eee_936a_4eff_874b_a810b5e109f7" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\Selection\index.html" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_main.js_3beedd20_3cd9_40f9_b896_b6a31365c1c7" Guid="162ba815-cca8-454d-9a45-dece70e403a7" Win64="no">
+                      <File Name="main.js" Id="_main.js_3beedd20_3cd9_40f9_b896_b6a31365c1c7" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\Selection\main.js" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_main.js.LEGAL.txt_ea9b8758_6dc6_4d7e_8bbe_02c0d84da236" Guid="9e91973b-1e62-4a5c-b6d4-0c49625467ca" Win64="no">
+                      <File Name="main.js.LEGAL.txt" Id="_main.js.LEGAL.txt_ea9b8758_6dc6_4d7e_8bbe_02c0d84da236" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\Selection\main.js.LEGAL.txt" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_main.js.map_a54a9327_a7c5_44ea_9eb1_48734906c5db" Guid="e3dd09ae-be98-4a2e-9d25-a5a4a6b03746" Win64="no">
+                      <File Name="main.js.map" Id="_main.js.map_a54a9327_a7c5_44ea_9eb1_48734906c5db" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\Selection\main.js.map" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                    <Component Id="_selection.css_40455da4_aff6_4489_ae3a_9dfa7ed6ae00" Guid="3bc5899b-84d6-4fe3-814b-3cd9423efe7d" Win64="no">
+                      <File Name="selection.css" Id="_selection.css_40455da4_aff6_4489_ae3a_9dfa7ed6ae00" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\Selection\selection.css" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                    </Component>
+                  </Directory>                  <Component Id="_resources_app_Pages_index.html_a3c5e57d_3934_4de9_b3c8_6000fda6907e" Guid="e9518c61-96ea-4041-9658-e297f444e56a" Win64="no">
+                    <File Name="index.html" Id="_resources_app_Pages_index.html_a3c5e57d_3934_4de9_b3c8_6000fda6907e" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Pages\index.html" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                  </Component>
+                </Directory>
+
+                <Directory Id="_resources_app_Resources_343d7090_39b8_48ce_864d_8cdc3f763b35" Name="Resources">
+                  <Directory Id="_resources_app_Resources_Libs_4a39eef4_8b2a_49c6_818b_b94e85fe64b4" Name="Libs">
+                    <Directory Id="_Mediapipe_89ba3c6b_861b_4111_999f_003e6de37b15" Name="Mediapipe">
+                      <Component Id="_hand_landmark_full.tflite_ed8636ef_b04d_4547_904c_a1b77860cd9a" Guid="821a71c9-4a28-435b-a555-d8b96af2b591" Win64="no">
+                        <File Name="hand_landmark_full.tflite" Id="_hand_landmark_full.tflite_ed8636ef_b04d_4547_904c_a1b77860cd9a" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Mediapipe\hand_landmark_full.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_hand_landmark_lite.tflite_b305ab53_5b35_424e_bb95_507667e6b68d" Guid="3c0b4571-b6d2-4165-a510-f6c78c57134b" Win64="no">
+                        <File Name="hand_landmark_lite.tflite" Id="_hand_landmark_lite.tflite_b305ab53_5b35_424e_bb95_507667e6b68d" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Mediapipe\hand_landmark_lite.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_hands.binarypb_46e36c97_21f1_4bcf_b4d3_f79e29a1cf67" Guid="fa11244c-f65a-4e6d-8ad7-faf2c52532ce" Win64="no">
+                        <File Name="hands.binarypb" Id="_hands.binarypb_46e36c97_21f1_4bcf_b4d3_f79e29a1cf67" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Mediapipe\hands.binarypb" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_hands_solution_packed_assets.data_2e880ba1_f041_4c6f_8202_a8eafbd7365d" Guid="6cb03425-6309-4a7e-96eb-87c14b09748c" Win64="no">
+                        <File Name="hands_solution_packed_assets.data" Id="_hands_solution_packed_assets.data_2e880ba1_f041_4c6f_8202_a8eafbd7365d" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Mediapipe\hands_solution_packed_assets.data" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_hands_solution_packed_assets_loade_83524678_4a88_4ae5_9b1e_7e6da9076a4f" Guid="4d6760ef-7bc3-4275-afee-8e900344c7cc" Win64="no">
+                        <File Name="hands_solution_packed_assets_loader.js" Id="_hands_solution_packed_assets_loade_83524678_4a88_4ae5_9b1e_7e6da9076a4f" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Mediapipe\hands_solution_packed_assets_loader.js" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_hands_solution_simd_wasm_bin.data_a3b017bf_7e75_4006_81a3_efddbc20a2f6" Guid="e3fdf7b3-5003-4bbb-984a-2ccf0a862d0b" Win64="no">
+                        <File Name="hands_solution_simd_wasm_bin.data" Id="_hands_solution_simd_wasm_bin.data_a3b017bf_7e75_4006_81a3_efddbc20a2f6" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Mediapipe\hands_solution_simd_wasm_bin.data" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_hands_solution_simd_wasm_bin.js_c3f0df8f_2dec_4e62_a62d_b2b608c30042" Guid="091efd2c-781a-43cb-806e-732c6b98d4a2" Win64="no">
+                        <File Name="hands_solution_simd_wasm_bin.js" Id="_hands_solution_simd_wasm_bin.js_c3f0df8f_2dec_4e62_a62d_b2b608c30042" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Mediapipe\hands_solution_simd_wasm_bin.js" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_hands_solution_simd_wasm_bin.wasm_1593a052_0c03_4a42_9821_ad644deaa983" Guid="23cbe2a0-e7e3-4c9d-a222-59292669cded" Win64="no">
+                        <File Name="hands_solution_simd_wasm_bin.wasm" Id="_hands_solution_simd_wasm_bin.wasm_1593a052_0c03_4a42_9821_ad644deaa983" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Mediapipe\hands_solution_simd_wasm_bin.wasm" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_hands_solution_wasm_bin.js_fd3581dd_0c64_4b0e_be3b_89cbf23d89e3" Guid="c7fe073a-f507-493f-b410-d6341d254332" Win64="no">
+                        <File Name="hands_solution_wasm_bin.js" Id="_hands_solution_wasm_bin.js_fd3581dd_0c64_4b0e_be3b_89cbf23d89e3" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Mediapipe\hands_solution_wasm_bin.js" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_hands_solution_wasm_bin.wasm_2d0339c8_b7d3_484e_8d2b_4e1d73ece427" Guid="17c0d566-125a-4ceb-a676-c54b6128013e" Win64="no">
+                        <File Name="hands_solution_wasm_bin.wasm" Id="_hands_solution_wasm_bin.wasm_2d0339c8_b7d3_484e_8d2b_4e1d73ece427" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Mediapipe\hands_solution_wasm_bin.wasm" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_pose_landmark_full.tflite_93eade20_4a21_4fae_b807_bb8b36d3ecd5" Guid="e085738c-0078-4fa9-815d-e9834d669c41" Win64="no">
+                        <File Name="pose_landmark_full.tflite" Id="_pose_landmark_full.tflite_93eade20_4a21_4fae_b807_bb8b36d3ecd5" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Mediapipe\pose_landmark_full.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_pose_landmark_heavy.tflite_c7a94fb0_1504_4100_b3c8_b99c7db5573d" Guid="bbcc2c7f-9efe-482b-839e-986babc9306a" Win64="no">
+                        <File Name="pose_landmark_heavy.tflite" Id="_pose_landmark_heavy.tflite_c7a94fb0_1504_4100_b3c8_b99c7db5573d" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Mediapipe\pose_landmark_heavy.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_pose_landmark_lite.tflite_2a5e3cdc_d915_4a7d_b1fe_4bfc9c7f3519" Guid="c2820492-29ba-412a-ad95-23dec025e626" Win64="no">
+                        <File Name="pose_landmark_lite.tflite" Id="_pose_landmark_lite.tflite_2a5e3cdc_d915_4a7d_b1fe_4bfc9c7f3519" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Mediapipe\pose_landmark_lite.tflite" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_pose_solution_packed_assets.data_2bd99b27_38af_4d4b_88db_793de5cbd91e" Guid="eaf950d5-6da9-4b3c-9a12-a95df5307a81" Win64="no">
+                        <File Name="pose_solution_packed_assets.data" Id="_pose_solution_packed_assets.data_2bd99b27_38af_4d4b_88db_793de5cbd91e" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Mediapipe\pose_solution_packed_assets.data" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_pose_solution_packed_assets_loader_bab82f21_ca49_4dd9_93a5_746ecb49ba46" Guid="8d31c3b9-1fc1-48f7-b721-85157811446b" Win64="no">
+                        <File Name="pose_solution_packed_assets_loader.js" Id="_pose_solution_packed_assets_loader_bab82f21_ca49_4dd9_93a5_746ecb49ba46" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Mediapipe\pose_solution_packed_assets_loader.js" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_pose_solution_simd_wasm_bin.data_ba3a3652_527f_4822_8afe_cfaa762b3217" Guid="836cda26-b170-42ea-8cbe-ba34aa45d4fe" Win64="no">
+                        <File Name="pose_solution_simd_wasm_bin.data" Id="_pose_solution_simd_wasm_bin.data_ba3a3652_527f_4822_8afe_cfaa762b3217" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Mediapipe\pose_solution_simd_wasm_bin.data" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_pose_solution_simd_wasm_bin.js_6f14e300_2cd8_427b_8690_0ed72f9cd434" Guid="61a3a27a-38ba-404b-a046-75724d609bee" Win64="no">
+                        <File Name="pose_solution_simd_wasm_bin.js" Id="_pose_solution_simd_wasm_bin.js_6f14e300_2cd8_427b_8690_0ed72f9cd434" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Mediapipe\pose_solution_simd_wasm_bin.js" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_pose_solution_simd_wasm_bin.wasm_6c48e909_1f5f_4654_b2f0_9f13e754a522" Guid="a475acf2-5d4c-4918-b539-5a25a4acd19e" Win64="no">
+                        <File Name="pose_solution_simd_wasm_bin.wasm" Id="_pose_solution_simd_wasm_bin.wasm_6c48e909_1f5f_4654_b2f0_9f13e754a522" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Mediapipe\pose_solution_simd_wasm_bin.wasm" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_pose_solution_wasm_bin.js_4fa3514d_4aba_4008_89f4_bb1c439345e4" Guid="12acf9ba-8a53-4611-aaeb-33b15a7a0f7f" Win64="no">
+                        <File Name="pose_solution_wasm_bin.js" Id="_pose_solution_wasm_bin.js_4fa3514d_4aba_4008_89f4_bb1c439345e4" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Mediapipe\pose_solution_wasm_bin.js" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_pose_solution_wasm_bin.wasm_8b57f5d1_9e85_4c90_aa81_8743a0afc09a" Guid="fa64e4ee-ebc7-40e9-aa16-db0ddf26deb6" Win64="no">
+                        <File Name="pose_solution_wasm_bin.wasm" Id="_pose_solution_wasm_bin.wasm_8b57f5d1_9e85_4c90_aa81_8743a0afc09a" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Mediapipe\pose_solution_wasm_bin.wasm" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_pose_web.binarypb_498a56ac_56ce_41fc_b10b_197bb485a047" Guid="b1740ad3-b682-4ad2-9813-e2f7928f48c2" Win64="no">
+                        <File Name="pose_web.binarypb" Id="_pose_web.binarypb_498a56ac_56ce_41fc_b10b_197bb485a047" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Mediapipe\pose_web.binarypb" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                    </Directory>
+                    <Directory Id="_Tensorflow_5c0e3532_9443_4426_aaa4_26ed0164f71a" Name="Tensorflow">
+                      <Component Id="_tflite_web_api_cc.wasm_b8722742_b882_45a3_83fe_b2e788ff0d97" Guid="cf16cccf-f223-44e0-b3ce-d5256b28dd67" Win64="no">
+                        <File Name="tflite_web_api_cc.wasm" Id="_tflite_web_api_cc.wasm_b8722742_b882_45a3_83fe_b2e788ff0d97" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Tensorflow\tflite_web_api_cc.wasm" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_tflite_web_api_cc_simd.js_8442c287_d8e8_421d_9a51_a8c046f2d895" Guid="172a58bf-48aa-492e-9b3c-aba1143e6a4d" Win64="no">
+                        <File Name="tflite_web_api_cc_simd.js" Id="_tflite_web_api_cc_simd.js_8442c287_d8e8_421d_9a51_a8c046f2d895" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Tensorflow\tflite_web_api_cc_simd.js" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_tflite_web_api_cc_simd.wasm_888370f2_be80_457c_ac99_222873ec583c" Guid="678c36e1-ed60-4585-aab0-343dffb5fdf6" Win64="no">
+                        <File Name="tflite_web_api_cc_simd.wasm" Id="_tflite_web_api_cc_simd.wasm_888370f2_be80_457c_ac99_222873ec583c" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Tensorflow\tflite_web_api_cc_simd.wasm" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_tflite_web_api_cc_simd_threaded.js_7d062ecd_f6d6_40c5_98e4_a116e157fc9d" Guid="f5b1f2f5-4413-43e1-91f3-34d557db39e7" Win64="no">
+                        <File Name="tflite_web_api_cc_simd_threaded.js" Id="_tflite_web_api_cc_simd_threaded.js_7d062ecd_f6d6_40c5_98e4_a116e157fc9d" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Tensorflow\tflite_web_api_cc_simd_threaded.js" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_tflite_web_api_cc_simd_threaded.wa_c37dc140_8ef8_4d72_af7c_4bf6edecf21a" Guid="78409b9a-fab9-4cb4-b6ec-62973a8e1638" Win64="no">
+                        <File Name="tflite_web_api_cc_simd_threaded.wasm" Id="_tflite_web_api_cc_simd_threaded.wa_c37dc140_8ef8_4d72_af7c_4bf6edecf21a" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Tensorflow\tflite_web_api_cc_simd_threaded.wasm" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_tflite_web_api_cc_simd_threaded.wo_d4adb179_ff76_4eac_8615_63a211e50a59" Guid="a66b9b89-b485-42da-b5d2-ff3eb07f4769" Win64="no">
+                        <File Name="tflite_web_api_cc_simd_threaded.worker.js" Id="_tflite_web_api_cc_simd_threaded.wo_d4adb179_ff76_4eac_8615_63a211e50a59" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Tensorflow\tflite_web_api_cc_simd_threaded.worker.js" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_tflite_web_api_cc_threaded.js_6dbad221_f814_44ae_a81b_c60e579c6659" Guid="a337c974-3698-4b62-ac52-64eeddd55521" Win64="no">
+                        <File Name="tflite_web_api_cc_threaded.js" Id="_tflite_web_api_cc_threaded.js_6dbad221_f814_44ae_a81b_c60e579c6659" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Tensorflow\tflite_web_api_cc_threaded.js" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_tflite_web_api_cc_threaded.wasm_32847b23_b3a1_4b15_83cf_7d6260f9755f" Guid="e5be8c96-0341-4e31-a4f8-05003eabab8d" Win64="no">
+                        <File Name="tflite_web_api_cc_threaded.wasm" Id="_tflite_web_api_cc_threaded.wasm_32847b23_b3a1_4b15_83cf_7d6260f9755f" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Tensorflow\tflite_web_api_cc_threaded.wasm" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_tflite_web_api_cc_threaded.worker._b88eab3d_94f6_4bbc_ba0a_71ca53aa80d7" Guid="192f961a-2299-473e-906f-46ef0d19a8c2" Win64="no">
+                        <File Name="tflite_web_api_cc_threaded.worker.js" Id="_tflite_web_api_cc_threaded.worker._b88eab3d_94f6_4bbc_ba0a_71ca53aa80d7" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\Libs\Tensorflow\tflite_web_api_cc_threaded.worker.js" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                    </Directory>
+                  </Directory>
+
+                  <Directory Id="_resources_app_Resources_images_0ec9aaaa_bb6f_48e3_b9d7_6da8dd1ff4d7" Name="images">
+                    <Directory Id="_backgrounds_75eddabb_8e00_40b0_b24a_3d1045eee8a4" Name="backgrounds">
+                      <Component Id="_bg_pop_1.jpg_b60c7a7e_69b3_49cf_9b18_33ea690494f2" Guid="315e17c2-a362-4e02-bb42-86d200742d2c" Win64="no">
+                        <File Name="bg-pop-1.jpg" Id="_bg_pop_1.jpg_b60c7a7e_69b3_49cf_9b18_33ea690494f2" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\backgrounds\bg-pop-1.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_bg_pop_2.jpg_a33f7114_0421_45d7_92c9_5b9c89d6a9a1" Guid="e876dbd4-8bbb-4d64-9f49-2269c56b35ed" Win64="no">
+                        <File Name="bg-pop-2.jpg" Id="_bg_pop_2.jpg_a33f7114_0421_45d7_92c9_5b9c89d6a9a1" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\backgrounds\bg-pop-2.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_bg_pop_3.jpg_12d62391_e682_44c2_b460_94b7d8a2e14e" Guid="57840749-cbcf-4e33-81f7-1543703be6ac" Win64="no">
+                        <File Name="bg-pop-3.jpg" Id="_bg_pop_3.jpg_12d62391_e682_44c2_b460_94b7d8a2e14e" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\backgrounds\bg-pop-3.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_img1.jpg_99622e38_805b_4d02_be03_5abc141e1c28" Guid="57461970-03f9-4ac0-800f-593bab514643" Win64="no">
+                        <File Name="img1.jpg" Id="_img1.jpg_99622e38_805b_4d02_be03_5abc141e1c28" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\backgrounds\img1.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_seamless_pattern_02.svg_fc2eb53e_2588_4c63_9409_031709f22636" Guid="5b1e2c84-eb4b-41c7-be81-1c507ac9d685" Win64="no">
+                        <File Name="seamless-pattern-02.svg" Id="_seamless_pattern_02.svg_fc2eb53e_2588_4c63_9409_031709f22636" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\backgrounds\seamless-pattern-02.svg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                    </Directory>
+                    <Directory Id="_creators_8c14397b_cdd3_4eb9_80d5_487e6e63f0bc" Name="creators">
+                      <Directory Id="_photos_d0bf0147_1f54_4213_930e_b466bf393520" Name="photos">
+                        <Component Id="_kaanda.png_2870b6dd_b824_4265_821f_a23e44f119d0" Guid="c089bbb2-b259-404f-82f0-30f304ef4f24" Win64="no">
+                          <File Name="kaanda.png" Id="_kaanda.png_2870b6dd_b824_4265_821f_a23e44f119d0" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\creators\photos\kaanda.png" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_kaddu.png_74217951_1a2b_4211_a273_33ff9b818da0" Guid="584733e3-626f-4f2d-8dd3-7b7e294253f7" Win64="no">
+                          <File Name="kaddu.png" Id="_kaddu.png_74217951_1a2b_4211_a273_33ff9b818da0" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\creators\photos\kaddu.png" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_lassan.png_3e483df7_2c48_4a88_bb09_94c30c5528d0" Guid="c4c0953c-9bf4-4c78-a229-1e0377d5d737" Win64="no">
+                          <File Name="lassan.png" Id="_lassan.png_3e483df7_2c48_4a88_bb09_94c30c5528d0" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\creators\photos\lassan.png" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_singhada.png_909365fe_4fff_4521_9634_c5f9b071657a" Guid="09b52aeb-9a0a-47e9-b45d-99295a1e45ac" Win64="no">
+                          <File Name="singhada.png" Id="_singhada.png_909365fe_4fff_4521_9634_c5f9b071657a" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\creators\photos\singhada.png" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                      </Directory>                      <Component Id="_bg_pop_2.jpg_0629996e_84e1_4449_82a3_124eefe072b4" Guid="54838fdf-e949-4def-8034-28bde596ddf5" Win64="no">
+                        <File Name="bg-pop-2.jpg" Id="_bg_pop_2.jpg_0629996e_84e1_4449_82a3_124eefe072b4" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\creators\bg-pop-2.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                    </Directory>
+
+                    <Directory Id="_favicon_io_efd2ecaa_233d_4268_9d2a_84f9ed12da0a" Name="favicon_io">
+                      <Component Id="_favicon.ico_c69a09cc_bc15_43f7_a776_4befa1b32557" Guid="0faf5402-267a-4ce3-95f2-3310da643bba" Win64="no">
+                        <File Name="favicon.ico" Id="_favicon.ico_c69a09cc_bc15_43f7_a776_4befa1b32557" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\favicon_io\favicon.ico" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_favicon_16.png_41ba2c1d_fcbe_41a3_aa6a_46a89d69c229" Guid="f3d049c6-0c42-43ab-8ed6-e9b98536556f" Win64="no">
+                        <File Name="favicon_16.png" Id="_favicon_16.png_41ba2c1d_fcbe_41a3_aa6a_46a89d69c229" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\favicon_io\favicon_16.png" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_favicon_180.png_c51a42c2_b311_40c2_a45d_0c12bb911dd0" Guid="1b65699a-43fe-46fe-b01d-60bf28f0186b" Win64="no">
+                        <File Name="favicon_180.png" Id="_favicon_180.png_c51a42c2_b311_40c2_a45d_0c12bb911dd0" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\favicon_io\favicon_180.png" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_favicon_192.png_999362ae_c778_413b_8edd_bf09d2103c99" Guid="ba52f5da-0e3f-4728-8bad-746f4c4f5946" Win64="no">
+                        <File Name="favicon_192.png" Id="_favicon_192.png_999362ae_c778_413b_8edd_bf09d2103c99" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\favicon_io\favicon_192.png" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_favicon_32.png_a12ca6a0_4597_4f63_8b72_03db212a0226" Guid="8b998599-8533-44ed-94ae-f8a678da50fa" Win64="no">
+                        <File Name="favicon_32.png" Id="_favicon_32.png_a12ca6a0_4597_4f63_8b72_03db212a0226" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\favicon_io\favicon_32.png" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_favicon_512.png_3fe2d020_4167_4c28_985d_ffa1856d1fca" Guid="31f99ca4-bdcc-4dcd-8c78-146c05af8e33" Win64="no">
+                        <File Name="favicon_512.png" Id="_favicon_512.png_3fe2d020_4167_4c28_985d_ffa1856d1fca" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\favicon_io\favicon_512.png" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_site.webmanifest_361b26e6_33c8_4aa1_ad5a_12848308ecb8" Guid="e4f61e30-5c1e-413a-bbd0-339e87a317b6" Win64="no">
+                        <File Name="site.webmanifest" Id="_site.webmanifest_361b26e6_33c8_4aa1_ad5a_12848308ecb8" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\favicon_io\site.webmanifest" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                    </Directory>
+                    <Directory Id="_howToUse_8a4b09ff_f01c_406e_a6df_3d096338bc49" Name="howToUse">
+                      <Component Id="_bg_pop_2.jpg_fcad39aa_cbd2_4cac_97ab_25f2ee9a92db" Guid="76b32cee-cd5f-4586-bb78-5bf63d655321" Win64="no">
+                        <File Name="bg-pop-2.jpg" Id="_bg_pop_2.jpg_fcad39aa_cbd2_4cac_97ab_25f2ee9a92db" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\howToUse\bg-pop-2.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_menu_closed.png_c54823af_a2a6_4f8d_a929_06cac85d3aeb" Guid="0b67cdeb-b323-494a-9686-d65ca4b6e246" Win64="no">
+                        <File Name="menu_closed.png" Id="_menu_closed.png_c54823af_a2a6_4f8d_a929_06cac85d3aeb" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\howToUse\menu_closed.png" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_menu_open.png_94ee1454_6753_4ac6_8fc3_c4627afd40d7" Guid="e962cc59-6cb7-4bd1-ae61-eb9607abc661" Win64="no">
+                        <File Name="menu_open.png" Id="_menu_open.png_94ee1454_6753_4ac6_8fc3_c4627afd40d7" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\howToUse\menu_open.png" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_no_hand.png_a8020702_7275_4f86_b193_9f5e35782e2b" Guid="11e9d244-3909-4d7b-8179-2c1f302526ff" Win64="no">
+                        <File Name="no_hand.png" Id="_no_hand.png_a8020702_7275_4f86_b193_9f5e35782e2b" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\howToUse\no_hand.png" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_practice.png_860f6279_09f3_467d_8a5a_630987c01bcf" Guid="d3cfe79e-c8b6-49d6-af9f-ffe44e96c90b" Win64="no">
+                        <File Name="practice.png" Id="_practice.png_860f6279_09f3_467d_8a5a_630987c01bcf" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\howToUse\practice.png" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_right.png_728ac49b_8c04_4056_935b_a5f391b0a348" Guid="781aed5f-af2f-4d22-935f-73b854fab122" Win64="no">
+                        <File Name="right.png" Id="_right.png_728ac49b_8c04_4056_935b_a5f391b0a348" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\howToUse\right.png" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_wrong.png_5db956a0_7cc1_4f81_bf7a_2b32de490035" Guid="33fbde3c-1db3-4c55-baac-9183a4d438e6" Win64="no">
+                        <File Name="wrong.png" Id="_wrong.png_5db956a0_7cc1_4f81_bf7a_2b32de490035" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\howToUse\wrong.png" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                    </Directory>
+                    <Directory Id="_icons_0bb31956_8061_40ee_8f4a_fc6459ea6eb6" Name="icons">
+                      <Component Id="_check_solid.svg_7e8548ba_06a2_4c5d_8733_cbefbc14af96" Guid="eda0ce18-0c9a-4a93-ae23-5f75226691d0" Win64="no">
+                        <File Name="check-solid.svg" Id="_check_solid.svg_7e8548ba_06a2_4c5d_8733_cbefbc14af96" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\icons\check-solid.svg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_circle_chevron_right_solid.svg_8fb1c518_3c13_4e32_a1cd_b9dba8eb26ba" Guid="975d3d12-7f6b-4af2-afb0-62a3cc80f1e9" Win64="no">
+                        <File Name="circle-chevron-right-solid.svg" Id="_circle_chevron_right_solid.svg_8fb1c518_3c13_4e32_a1cd_b9dba8eb26ba" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\icons\circle-chevron-right-solid.svg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_down.svg_69dce4eb_f755_41ad_b38b_d3e8d158159b" Guid="a5d9bc7c-67f6-4d8f-a29d-909490bcfc61" Win64="no">
+                        <File Name="down.svg" Id="_down.svg_69dce4eb_f755_41ad_b38b_d3e8d158159b" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\icons\down.svg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_question_solid.svg_cdbe03bc_28ee_4e85_9622_afd4fd9017e3" Guid="0c661330-ec91-40cf-bb65-4e1513b358bf" Win64="no">
+                        <File Name="question-solid.svg" Id="_question_solid.svg_cdbe03bc_28ee_4e85_9622_afd4fd9017e3" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\icons\question-solid.svg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                      <Component Id="_xmark_solid.svg_230853be_3f35_43f9_b37c_489c5178f975" Guid="88110708-cf9c-40d7-8dca-8189b3efb5c8" Win64="no">
+                        <File Name="xmark-solid.svg" Id="_xmark_solid.svg_230853be_3f35_43f9_b37c_489c5178f975" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\icons\xmark-solid.svg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                      </Component>
+                    </Directory>
+                    <Directory Id="_signs_e8ddf60e_6b9e_4a0e_8e0e_9a7e921209cf" Name="signs">
+                      <Directory Id="_cam_d98d5a73_ec86_40cd_aa3c_34eeb8d89948" Name="cam">
+                        <Component Id="_0_cam.jpg_550469e1_46e0_4eea_9661_de6db6d9a174" Guid="5817592a-0478-49fb-9665-e3cbdf038101" Win64="no">
+                          <File Name="0-cam.jpg" Id="_0_cam.jpg_550469e1_46e0_4eea_9661_de6db6d9a174" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\0-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_1_cam.jpg_6f710d9f_425a_468c_8cd9_40cf233d50d5" Guid="ceb5b3c6-cb76-4f67-86e1-1ef0e3b348ea" Win64="no">
+                          <File Name="1-cam.jpg" Id="_1_cam.jpg_6f710d9f_425a_468c_8cd9_40cf233d50d5" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\1-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_2_cam.jpg_a760c729_5fab_4007_8e71_402492ef8f58" Guid="b1fe6195-9b0f-485a-8a56-68584955c378" Win64="no">
+                          <File Name="2-cam.jpg" Id="_2_cam.jpg_a760c729_5fab_4007_8e71_402492ef8f58" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\2-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_3_cam.jpg_0eec97fe_57b0_4f32_923c_f10d4de90c0f" Guid="ab74dfcc-5536-42dd-a056-d04b7a7abdc6" Win64="no">
+                          <File Name="3-cam.jpg" Id="_3_cam.jpg_0eec97fe_57b0_4f32_923c_f10d4de90c0f" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\3-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_4_cam.jpg_a93426b0_0c84_4fed_b3e0_c9c6265e4d1a" Guid="68fa0460-46f2-498b-b153-b1216bec7b6f" Win64="no">
+                          <File Name="4-cam.jpg" Id="_4_cam.jpg_a93426b0_0c84_4fed_b3e0_c9c6265e4d1a" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\4-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_5_cam.jpg_dfe07491_e287_4811_86a4_db0a151ba18f" Guid="2d4c949e-0fe9-43d7-9804-7c9d9d04ec35" Win64="no">
+                          <File Name="5-cam.jpg" Id="_5_cam.jpg_dfe07491_e287_4811_86a4_db0a151ba18f" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\5-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_6_cam.jpg_23efe2be_ded8_4da5_9601_17d89dce8313" Guid="c7a3f307-df06-49fd-a7e1-13f86edc6215" Win64="no">
+                          <File Name="6-cam.jpg" Id="_6_cam.jpg_23efe2be_ded8_4da5_9601_17d89dce8313" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\6-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_7_cam.jpg_74dd4b28_7c8d_429f_84b1_2c06633014a0" Guid="4f19ae97-7c61-4250-bc18-ef37c30aafbb" Win64="no">
+                          <File Name="7-cam.jpg" Id="_7_cam.jpg_74dd4b28_7c8d_429f_84b1_2c06633014a0" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\7-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_8_cam.jpg_71d9fac3_8b04_414b_97d2_9bebf84c2367" Guid="46cb88cf-2cba-4c67-b020-d8a2ce155014" Win64="no">
+                          <File Name="8-cam.jpg" Id="_8_cam.jpg_71d9fac3_8b04_414b_97d2_9bebf84c2367" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\8-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_9_cam.jpg_5fd4f67f_6337_494b_983d_21b682fb40ce" Guid="7feb609a-e833-423c-b2d0-5ee7ff49056c" Win64="no">
+                          <File Name="9-cam.jpg" Id="_9_cam.jpg_5fd4f67f_6337_494b_983d_21b682fb40ce" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\9-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="__Hello_cam.jpg_2b00f1dd_75d0_4a0d_a93d_5aee4d40a7a0" Guid="4f00a93e-ca17-42c0-a204-bd6f3d085113" Win64="no">
+                          <File Name="_Hello-cam.jpg" Id="__Hello_cam.jpg_2b00f1dd_75d0_4a0d_a93d_5aee4d40a7a0" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\_Hello-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="__I_cam.jpg_09048be9_2ef0_4740_9b91_0f86890b91d7" Guid="cd6961c2-189f-48e8-a621-df953f932632" Win64="no">
+                          <File Name="_I-cam.jpg" Id="__I_cam.jpg_09048be9_2ef0_4740_9b91_0f86890b91d7" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\_I-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="__India_cam.jpg_80df296b_3c18_483c_92de_c824101b5567" Guid="d4f7210a-0d6d-4d6d-8c23-73597a79b5fe" Win64="no">
+                          <File Name="_India-cam.jpg" Id="__India_cam.jpg_80df296b_3c18_483c_92de_c824101b5567" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\_India-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="__Man_cam.jpg_9a600610_3ea2_4bf2_a73a_e09565d6a9bb" Guid="f9ed71d1-8ca8-4b81-bfca-4df58ef82394" Win64="no">
+                          <File Name="_Man-cam.jpg" Id="__Man_cam.jpg_9a600610_3ea2_4bf2_a73a_e09565d6a9bb" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\_Man-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="__ThankYou_cam.jpg_cabcdefc_8ac7_4aee_a4cf_5dd4f8a2b1c4" Guid="066cf412-bfd9-459a-822b-ac82b47568a1" Win64="no">
+                          <File Name="_ThankYou-cam.jpg" Id="__ThankYou_cam.jpg_cabcdefc_8ac7_4aee_a4cf_5dd4f8a2b1c4" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\_ThankYou-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="__Woman_cam.jpg_cecb36a8_4073_488b_812d_13c68dd496e0" Guid="616f51ad-cb73-4522-909f-351cfe4abe50" Win64="no">
+                          <File Name="_Woman-cam.jpg" Id="__Woman_cam.jpg_cecb36a8_4073_488b_812d_13c68dd496e0" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\_Woman-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="__You_cam.jpg_491a27f8_e70e_42c6_9e6a_700620c0ec9e" Guid="6c7747e3-3468-445b-a9d8-3aca9e51a481" Win64="no">
+                          <File Name="_You-cam.jpg" Id="__You_cam.jpg_491a27f8_e70e_42c6_9e6a_700620c0ec9e" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\_You-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="__welcome_cam.jpg_d4cf8f3a_4ce6_4b9d_b351_b79437c31ad4" Guid="0521abe3-7820-481c-8ed7-852c35d32d17" Win64="no">
+                          <File Name="_welcome-cam.jpg" Id="__welcome_cam.jpg_d4cf8f3a_4ce6_4b9d_b351_b79437c31ad4" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\_welcome-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_a_cam.jpg_52ceff6d_6a7f_4eb0_ad10_793af79da524" Guid="424e6e17-bb85-4e11-82f5-f93ef83dd600" Win64="no">
+                          <File Name="a-cam.jpg" Id="_a_cam.jpg_52ceff6d_6a7f_4eb0_ad10_793af79da524" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\a-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_b_cam.jpg_c6ec6314_c9da_459a_8f1b_a81e3f6c7424" Guid="99c316da-2e91-4d4c-8555-67c3c3092469" Win64="no">
+                          <File Name="b-cam.jpg" Id="_b_cam.jpg_c6ec6314_c9da_459a_8f1b_a81e3f6c7424" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\b-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_c_cam.jpg_02666eda_37ba_4e66_9ed9_9a6d44cbca0c" Guid="6a6c0edb-f704-41ca-8c86-e4296cbf96eb" Win64="no">
+                          <File Name="c-cam.jpg" Id="_c_cam.jpg_02666eda_37ba_4e66_9ed9_9a6d44cbca0c" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\c-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_d_cam.jpg_05c1c15a_dc77_4472_91dc_041eab4bdc27" Guid="0b4b7ad8-6482-4f0d-8424-42e0bd04c419" Win64="no">
+                          <File Name="d-cam.jpg" Id="_d_cam.jpg_05c1c15a_dc77_4472_91dc_041eab4bdc27" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\d-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_e_cam.jpg_8e284c38_8a54_4780_92f0_ccbb0423286f" Guid="ff557c68-cb44-4747-a5fe-020491ed6189" Win64="no">
+                          <File Name="e-cam.jpg" Id="_e_cam.jpg_8e284c38_8a54_4780_92f0_ccbb0423286f" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\e-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_f_cam.jpg_39c4bf56_89e1_4985_89b4_80ccec9bdf3c" Guid="eb13ee1d-4491-46d8-8767-73281f561133" Win64="no">
+                          <File Name="f-cam.jpg" Id="_f_cam.jpg_39c4bf56_89e1_4985_89b4_80ccec9bdf3c" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\f-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_g_cam.jpg_5ab7be5a_6f89_4e94_b7af_9c04d254674d" Guid="df725690-1e02-4250-8047-f7558c3a0486" Win64="no">
+                          <File Name="g-cam.jpg" Id="_g_cam.jpg_5ab7be5a_6f89_4e94_b7af_9c04d254674d" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\g-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_h_cam.jpg_a2f27bb3_8c60_490e_866e_4bfbcf97424e" Guid="d0366d1f-6fb1-4d14-882e-f970e3d407b2" Win64="no">
+                          <File Name="h-cam.jpg" Id="_h_cam.jpg_a2f27bb3_8c60_490e_866e_4bfbcf97424e" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\h-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_i_cam.jpg_11f4e2d5_e563_4b15_a426_88f8782bc0eb" Guid="5a953c70-4174-4d30-9781-e55bbac851aa" Win64="no">
+                          <File Name="i-cam.jpg" Id="_i_cam.jpg_11f4e2d5_e563_4b15_a426_88f8782bc0eb" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\i-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_j_cam.jpg_210b8896_9970_4aa0_a93d_f9769c79ba7c" Guid="c98b493c-17b7-4836-b274-1d3f19decaf5" Win64="no">
+                          <File Name="j-cam.jpg" Id="_j_cam.jpg_210b8896_9970_4aa0_a93d_f9769c79ba7c" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\j-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_k_cam.jpg_9324248c_4464_467e_88da_cc9ba2119255" Guid="c6602950-54ee-4cc8-a983-2e628f5711a4" Win64="no">
+                          <File Name="k-cam.jpg" Id="_k_cam.jpg_9324248c_4464_467e_88da_cc9ba2119255" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\k-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_l_cam.jpg_149d35c4_1966_4e19_851c_0e37140fbea3" Guid="6c948916-925b-4346-a685-ad745f913237" Win64="no">
+                          <File Name="l-cam.jpg" Id="_l_cam.jpg_149d35c4_1966_4e19_851c_0e37140fbea3" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\l-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_m_cam.jpg_32f91bc9_f5fc_41ca_8c2b_8bf9d45e3770" Guid="6a447811-3ab9-4a83-b4fe-41d3732dd0e4" Win64="no">
+                          <File Name="m-cam.jpg" Id="_m_cam.jpg_32f91bc9_f5fc_41ca_8c2b_8bf9d45e3770" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\m-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_n_cam.jpg_87ea829a_e0a2_42b6_ab89_bbdd44c3cce7" Guid="16e0418c-823b-418a-a99d-a099b918bf01" Win64="no">
+                          <File Name="n-cam.jpg" Id="_n_cam.jpg_87ea829a_e0a2_42b6_ab89_bbdd44c3cce7" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\n-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_o_cam.jpg_01781446_23fe_43bf_baa8_4d93066e6e33" Guid="e940ee45-7c98-402e-998d-afce88bd4af0" Win64="no">
+                          <File Name="o-cam.jpg" Id="_o_cam.jpg_01781446_23fe_43bf_baa8_4d93066e6e33" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\o-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_p_cam.jpg_0b917f43_f1ca_4f5b_bc21_edd6db14943f" Guid="7af43aa1-bae3-473d-ba23-d969307db139" Win64="no">
+                          <File Name="p-cam.jpg" Id="_p_cam.jpg_0b917f43_f1ca_4f5b_bc21_edd6db14943f" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\p-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_q_cam.jpg_1ff5671a_a444_4cf7_b959_ca9fa3eb5f02" Guid="f660e756-44d6-4951-be91-95a7e8f426a5" Win64="no">
+                          <File Name="q-cam.jpg" Id="_q_cam.jpg_1ff5671a_a444_4cf7_b959_ca9fa3eb5f02" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\q-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_r_cam.jpg_eb8e8058_e832_4927_93a0_8dc838c0779d" Guid="9315085a-4afa-4342-85dd-ba2d310a621e" Win64="no">
+                          <File Name="r-cam.jpg" Id="_r_cam.jpg_eb8e8058_e832_4927_93a0_8dc838c0779d" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\r-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_s_cam.jpg_5d44aa6d_cf44_4762_8f50_771a9cdca8e3" Guid="dcd29921-61d6-4ec4-b1c3-a49b6171941e" Win64="no">
+                          <File Name="s-cam.jpg" Id="_s_cam.jpg_5d44aa6d_cf44_4762_8f50_771a9cdca8e3" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\s-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_t_cam.jpg_83bd970f_7f77_4fa3_8fca_7f8c95f2355e" Guid="bcd2c9b4-593f-4e8b-a529-b11a1ffd829c" Win64="no">
+                          <File Name="t-cam.jpg" Id="_t_cam.jpg_83bd970f_7f77_4fa3_8fca_7f8c95f2355e" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\t-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_u_cam.jpg_1c9c866d_b7c5_4f07_95c6_0ba938e7d5a8" Guid="e344291f-120a-4453-909f-4f6ee8780ae6" Win64="no">
+                          <File Name="u-cam.jpg" Id="_u_cam.jpg_1c9c866d_b7c5_4f07_95c6_0ba938e7d5a8" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\u-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_v_cam.jpg_8e594153_40d5_4e40_88b3_d009b265871a" Guid="1f240941-41e9-46e8-a14f-c054281ef557" Win64="no">
+                          <File Name="v-cam.jpg" Id="_v_cam.jpg_8e594153_40d5_4e40_88b3_d009b265871a" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\v-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_w_cam.jpg_09b5d2bb_b47d_420d_9654_a5c788eb934e" Guid="ab8b38be-14c3-4e15-a7a1-c063ed5c2c0e" Win64="no">
+                          <File Name="w-cam.jpg" Id="_w_cam.jpg_09b5d2bb_b47d_420d_9654_a5c788eb934e" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\w-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_x_cam.jpg_b85e7f17_b84c_4131_91bd_ff6fd806198b" Guid="195ea5d4-982b-4dd9-a62b-89df7e30e75b" Win64="no">
+                          <File Name="x-cam.jpg" Id="_x_cam.jpg_b85e7f17_b84c_4131_91bd_ff6fd806198b" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\x-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_y_cam.jpg_9c73b8b0_99b0_4a0a_83fe_94546c0e492c" Guid="c3c9dda3-fa9b-4a6b-af37-c44f34c95b11" Win64="no">
+                          <File Name="y-cam.jpg" Id="_y_cam.jpg_9c73b8b0_99b0_4a0a_83fe_94546c0e492c" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\y-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_z_cam.jpg_63e8cb9e_bdf1_4aa2_9ac0_bfede21c612a" Guid="38e3a16f-d721-48ce-b773-51de52898db4" Win64="no">
+                          <File Name="z-cam.jpg" Id="_z_cam.jpg_63e8cb9e_bdf1_4aa2_9ac0_bfede21c612a" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\cam\z-cam.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                      </Directory>
+                      <Directory Id="_self_3ae50bc2_4f6a_4da7_ab51_ca76bbc377fc" Name="self">
+                        <Component Id="_0_self.jpg_1b9285a0_4978_4a79_b3e0_9aa929c6f56b" Guid="f38df005-db7d-4ce8-bb98-2ba8eb9c0ff1" Win64="no">
+                          <File Name="0-self.jpg" Id="_0_self.jpg_1b9285a0_4978_4a79_b3e0_9aa929c6f56b" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\0-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_1_self.jpg_007a0860_b5c1_4221_acc2_fbb44b0b91f0" Guid="d095d45a-68f5-46e6-b02e-f25818690da5" Win64="no">
+                          <File Name="1-self.jpg" Id="_1_self.jpg_007a0860_b5c1_4221_acc2_fbb44b0b91f0" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\1-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_2_self.jpg_233f61f9_1548_4a34_8a1b_887b3648182b" Guid="d23f34c1-1948-427d-87e7-e9b6aeab1a0f" Win64="no">
+                          <File Name="2-self.jpg" Id="_2_self.jpg_233f61f9_1548_4a34_8a1b_887b3648182b" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\2-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_3_self.jpg_f9df0719_1b55_4330_a974_4643d54eab5c" Guid="77c341ed-0000-4de6-bb4d-51253b9dc1d4" Win64="no">
+                          <File Name="3-self.jpg" Id="_3_self.jpg_f9df0719_1b55_4330_a974_4643d54eab5c" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\3-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_4_self.jpg_5dc995f3_0d02_43b2_bf4c_b2b8d6ed0504" Guid="1ef0f4e4-d7bc-4c1e-8d28-4c1d5c2bc18e" Win64="no">
+                          <File Name="4-self.jpg" Id="_4_self.jpg_5dc995f3_0d02_43b2_bf4c_b2b8d6ed0504" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\4-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_5_self.jpg_c096a30c_13c6_426f_a2d3_23474e5e0d76" Guid="06156100-4fd0-4224-bee8-2ab5243ea23b" Win64="no">
+                          <File Name="5-self.jpg" Id="_5_self.jpg_c096a30c_13c6_426f_a2d3_23474e5e0d76" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\5-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_6_self.jpg_d5d622e6_1ac3_4944_ab4f_233b228c3653" Guid="62986120-0705-4468-aa1a-d3fafba4fbd6" Win64="no">
+                          <File Name="6-self.jpg" Id="_6_self.jpg_d5d622e6_1ac3_4944_ab4f_233b228c3653" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\6-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_7_self.jpg_b67b6f98_6833_4621_a43c_8070f9325f1b" Guid="8b06b59d-92f5-47a7-91df-f054aa8453f6" Win64="no">
+                          <File Name="7-self.jpg" Id="_7_self.jpg_b67b6f98_6833_4621_a43c_8070f9325f1b" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\7-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_8_self.jpg_63293896_7c4b_482b_b6d2_a69283874158" Guid="b6401247-8d3a-47d2-b81c-7eda169600b1" Win64="no">
+                          <File Name="8-self.jpg" Id="_8_self.jpg_63293896_7c4b_482b_b6d2_a69283874158" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\8-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_9_self.jpg_0f175fa6_1818_4608_a468_dcd5d45d3d01" Guid="5de7d743-2d63-4d32-81c7-a88760f55915" Win64="no">
+                          <File Name="9-self.jpg" Id="_9_self.jpg_0f175fa6_1818_4608_a468_dcd5d45d3d01" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\9-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="__Hello_self.jpg_7e9c2966_4dec_45d9_957c_e5a1c3c1300b" Guid="1fdd0a54-5901-44cd-805d-51885cce77ea" Win64="no">
+                          <File Name="_Hello-self.jpg" Id="__Hello_self.jpg_7e9c2966_4dec_45d9_957c_e5a1c3c1300b" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\_Hello-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="__I_self.jpg_eccc906b_06ad_40ce_8800_b2e82348e25e" Guid="b62ead76-2085-4d7b-80af-310d67827b1a" Win64="no">
+                          <File Name="_I-self.jpg" Id="__I_self.jpg_eccc906b_06ad_40ce_8800_b2e82348e25e" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\_I-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="__India_self.jpg_8c486c8a_b450_4b4a_a820_8a23b2ddc968" Guid="1c0edd35-3370-486f-8502-cbe822898c23" Win64="no">
+                          <File Name="_India-self.jpg" Id="__India_self.jpg_8c486c8a_b450_4b4a_a820_8a23b2ddc968" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\_India-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="__Man_self.jpg_181f7788_25cb_4c86_b4cc_74cb3e4898f9" Guid="ac82c393-301b-4356-b972-526f404f5fca" Win64="no">
+                          <File Name="_Man-self.jpg" Id="__Man_self.jpg_181f7788_25cb_4c86_b4cc_74cb3e4898f9" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\_Man-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="__ThankYou_self.jpg_99ae2b08_d11c_4891_bb48_d8a196bb2e53" Guid="a0d8f426-e1fa-4479-9a44-a622f2e484a1" Win64="no">
+                          <File Name="_ThankYou-self.jpg" Id="__ThankYou_self.jpg_99ae2b08_d11c_4891_bb48_d8a196bb2e53" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\_ThankYou-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="__Woman_self.jpg_d7a81b48_1270_4b80_bc65_dc6dece64d2a" Guid="7e806a77-c99c-49ce-9021-96f59561f53b" Win64="no">
+                          <File Name="_Woman-self.jpg" Id="__Woman_self.jpg_d7a81b48_1270_4b80_bc65_dc6dece64d2a" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\_Woman-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="__You_self.jpg_f2a77e85_3af7_42c2_8f57_e0380bf0b9ec" Guid="3588b28a-498b-4e0b-a1b4-9ca0a876bdff" Win64="no">
+                          <File Name="_You-self.jpg" Id="__You_self.jpg_f2a77e85_3af7_42c2_8f57_e0380bf0b9ec" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\_You-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="__welcome_self.jpg_7f40c60e_8a13_4889_8d1b_ad7aa77705b2" Guid="26dde7c0-7bcb-4487-9d76-2b308cf86b88" Win64="no">
+                          <File Name="_welcome-self.jpg" Id="__welcome_self.jpg_7f40c60e_8a13_4889_8d1b_ad7aa77705b2" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\_welcome-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_a_self.jpg_687159a0_7d64_4daa_8f6d_4009d64c98fd" Guid="703642f2-398d-40e1-b922-720d0ce8ff6c" Win64="no">
+                          <File Name="a-self.jpg" Id="_a_self.jpg_687159a0_7d64_4daa_8f6d_4009d64c98fd" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\a-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_b_self.jpg_03415ce9_78be_42dc_9f6f_706e872836d0" Guid="2e25bb89-06d9-4369-a992-6dee2734fbc4" Win64="no">
+                          <File Name="b-self.jpg" Id="_b_self.jpg_03415ce9_78be_42dc_9f6f_706e872836d0" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\b-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_c_self.jpg_33d43464_30cf_43bc_ab94_12f99dddca63" Guid="2cc27dcb-f394-40ac-931b-f422c6dc2e84" Win64="no">
+                          <File Name="c-self.jpg" Id="_c_self.jpg_33d43464_30cf_43bc_ab94_12f99dddca63" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\c-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_d_self.jpg_02dfcd6d_9a42_4878_8c84_6c40899f65e9" Guid="f4c431f4-9b64-4dad-a6a5-bf6f29751660" Win64="no">
+                          <File Name="d-self.jpg" Id="_d_self.jpg_02dfcd6d_9a42_4878_8c84_6c40899f65e9" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\d-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_e_self.jpg_ced00c2f_1ee8_4aaf_a5b6_2beaf33a5dd4" Guid="0b707831-3dcd-4a86-bf5d-ab0794ca791a" Win64="no">
+                          <File Name="e-self.jpg" Id="_e_self.jpg_ced00c2f_1ee8_4aaf_a5b6_2beaf33a5dd4" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\e-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_f_self.jpg_5db5c6a7_ce2e_46b7_8764_5e49e9e82b15" Guid="a528a952-e634-4f93-b553-39ee22473904" Win64="no">
+                          <File Name="f-self.jpg" Id="_f_self.jpg_5db5c6a7_ce2e_46b7_8764_5e49e9e82b15" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\f-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_g_self.jpg_8ffc70dd_2ee3_4734_8505_a7bfaf7ed843" Guid="59eae55e-7d1a-43c1-97d6-910695ea67d9" Win64="no">
+                          <File Name="g-self.jpg" Id="_g_self.jpg_8ffc70dd_2ee3_4734_8505_a7bfaf7ed843" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\g-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_h_self.jpg_94def048_3ab0_40a3_992e_6a7250f1dc37" Guid="b80a3d8a-5b86-4f65-92c9-59003cd0d71b" Win64="no">
+                          <File Name="h-self.jpg" Id="_h_self.jpg_94def048_3ab0_40a3_992e_6a7250f1dc37" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\h-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_i_self.jpg_363b0599_5a92_4dad_a0be_b81e85bcb0e1" Guid="dd5bf6dc-a895-4987-a6d2-979fac2bb847" Win64="no">
+                          <File Name="i-self.jpg" Id="_i_self.jpg_363b0599_5a92_4dad_a0be_b81e85bcb0e1" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\i-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_j_self.jpg_2476bc4c_d1a8_4004_9503_fad244a30d22" Guid="c86dae9a-51b6-44a0-88fd-7ffe9d9a6a33" Win64="no">
+                          <File Name="j-self.jpg" Id="_j_self.jpg_2476bc4c_d1a8_4004_9503_fad244a30d22" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\j-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_k_self.jpg_76ca9230_0cbd_4e42_9a17_eb5a68eb8d34" Guid="610700e0-d0fa-4ffa-b5b9-e93f9bf719fe" Win64="no">
+                          <File Name="k-self.jpg" Id="_k_self.jpg_76ca9230_0cbd_4e42_9a17_eb5a68eb8d34" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\k-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_l_self.jpg_0d3cf7ca_63ea_40b5_a802_a1b63ac2b091" Guid="d17562e4-0162-4890-acff-e64c92f29d6a" Win64="no">
+                          <File Name="l-self.jpg" Id="_l_self.jpg_0d3cf7ca_63ea_40b5_a802_a1b63ac2b091" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\l-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_m_self.jpg_080025c2_6173_4861_b107_147e66765564" Guid="6ce962db-cd05-4c43-b2d6-830626d9eefc" Win64="no">
+                          <File Name="m-self.jpg" Id="_m_self.jpg_080025c2_6173_4861_b107_147e66765564" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\m-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_n_self.jpg_85616a3d_eef1_4c9d_9d03_e421c7707fdf" Guid="ff970c74-ee6e-46e5-9fa5-188fad540e88" Win64="no">
+                          <File Name="n-self.jpg" Id="_n_self.jpg_85616a3d_eef1_4c9d_9d03_e421c7707fdf" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\n-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_o_self.jpg_d3dd1dd2_a743_4ff0_af81_c4901fe9051a" Guid="ab8b8eb6-c727-4302-8844-f43a17eb89a9" Win64="no">
+                          <File Name="o-self.jpg" Id="_o_self.jpg_d3dd1dd2_a743_4ff0_af81_c4901fe9051a" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\o-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_p_self.jpg_8cbac03d_cf94_42b6_b8c8_f9ee617e345f" Guid="54c05b9f-7bad-4bc7-bd89-1289b119d07d" Win64="no">
+                          <File Name="p-self.jpg" Id="_p_self.jpg_8cbac03d_cf94_42b6_b8c8_f9ee617e345f" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\p-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_q_self.jpg_949f2520_c6bc_4671_b6bf_ef62362d3639" Guid="96036973-3ef7-4dee-bc5c-318c9de48379" Win64="no">
+                          <File Name="q-self.jpg" Id="_q_self.jpg_949f2520_c6bc_4671_b6bf_ef62362d3639" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\q-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_r_self.jpg_17788fe9_8687_4508_8d18_add55cf0d808" Guid="2a0a404c-d657-464b-ab90-5eb0ab1b696b" Win64="no">
+                          <File Name="r-self.jpg" Id="_r_self.jpg_17788fe9_8687_4508_8d18_add55cf0d808" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\r-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_s_self.jpg_4906d820_468a_4ac8_88f1_07235ad08fb6" Guid="cbf4a176-042e-4d7f-88fb-593839df86c6" Win64="no">
+                          <File Name="s-self.jpg" Id="_s_self.jpg_4906d820_468a_4ac8_88f1_07235ad08fb6" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\s-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_t_self.jpg_8b886305_a57b_41c9_885a_8d3b431741e1" Guid="80c49df8-c3b5-4175-a489-87cf7afb44fe" Win64="no">
+                          <File Name="t-self.jpg" Id="_t_self.jpg_8b886305_a57b_41c9_885a_8d3b431741e1" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\t-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_u_self.jpg_4fbe1104_bf88_4ef0_9d8a_76b38c2bf73d" Guid="491a16d4-21bb-4eda-b2a7-695ddad2b23a" Win64="no">
+                          <File Name="u-self.jpg" Id="_u_self.jpg_4fbe1104_bf88_4ef0_9d8a_76b38c2bf73d" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\u-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_v_self.jpg_27706ae5_309c_4d96_a351_81e9f0b7f2b0" Guid="ed9faa89-1e77-46d4-80b2-2f4cac3b9696" Win64="no">
+                          <File Name="v-self.jpg" Id="_v_self.jpg_27706ae5_309c_4d96_a351_81e9f0b7f2b0" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\v-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_w_self.jpg_abbb5ac9_98e1_41c7_afbc_1b5fc260ed00" Guid="f4418d4a-de81-4562-92a0-37855b86186a" Win64="no">
+                          <File Name="w-self.jpg" Id="_w_self.jpg_abbb5ac9_98e1_41c7_afbc_1b5fc260ed00" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\w-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_x_self.jpg_b4872a18_3bfc_4bad_83cc_b152cd2e198e" Guid="fd7c28b6-1c15-4c60-aff5-639aae87dc14" Win64="no">
+                          <File Name="x-self.jpg" Id="_x_self.jpg_b4872a18_3bfc_4bad_83cc_b152cd2e198e" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\x-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_y_self.jpg_9dcd0055_72b3_4d01_bc30_219adc6f3611" Guid="e6095942-f4e3-4385-99af-40b32a0395f3" Win64="no">
+                          <File Name="y-self.jpg" Id="_y_self.jpg_9dcd0055_72b3_4d01_bc30_219adc6f3611" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\y-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                        <Component Id="_z_self.jpg_3bd124e5_0aa1_47e7_9b5c_da35fd20fdb5" Guid="5200c72e-4ae4-49c0-a0b8-cee66d55b88d" Win64="no">
+                          <File Name="z-self.jpg" Id="_z_self.jpg_3bd124e5_0aa1_47e7_9b5c_da35fd20fdb5" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\Resources\images\signs\self\z-self.jpg" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                        </Component>
+                      </Directory>
+                    </Directory>
+
+                  </Directory>
+
+                </Directory>
+                <Component Id="_resources_app_chunk_KTBTIYDU.js_6ab6b745_553c_4443_9bf0_3b429506b8ef" Guid="254db3be-d672-4d5e-9151-08c12b663772" Win64="no">
+                  <File Name="chunk-KTBTIYDU.js" Id="_resources_app_chunk_KTBTIYDU.js_6ab6b745_553c_4443_9bf0_3b429506b8ef" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\chunk-KTBTIYDU.js" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                </Component>
+                <Component Id="_chunk_KTBTIYDU.js.LEGAL.txt_48bb5397_5d9e_46a2_8ce4_25dca4d6f08a" Guid="0de1eb43-c260-4941-91c4-82930a0c617a" Win64="no">
+                  <File Name="chunk-KTBTIYDU.js.LEGAL.txt" Id="_chunk_KTBTIYDU.js.LEGAL.txt_48bb5397_5d9e_46a2_8ce4_25dca4d6f08a" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\chunk-KTBTIYDU.js.LEGAL.txt" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                </Component>
+                <Component Id="_chunk_KTBTIYDU.js.map_4bb0c5c8_93fb_410a_943a_020dfa41c097" Guid="93888983-2cd6-4c1a-b22e-cb9365f234a6" Win64="no">
+                  <File Name="chunk-KTBTIYDU.js.map" Id="_chunk_KTBTIYDU.js.map_4bb0c5c8_93fb_410a_943a_020dfa41c097" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\chunk-KTBTIYDU.js.map" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                </Component>
+                <Component Id="_resources_app_index.html_df9d47a6_901a_4d69_8b48_ccc22074f191" Guid="7b2395fd-fb93-4f95-a7fa-84845f976a81" Win64="no">
+                  <File Name="index.html" Id="_resources_app_index.html_df9d47a6_901a_4d69_8b48_ccc22074f191" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\index.html" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                </Component>
+                <Component Id="_resources_app_index.js_a902af31_8159_423c_9acf_8bcc3f3247f1" Guid="e223259a-92cd-4233-98ad-1b40ab47fc7b" Win64="no">
+                  <File Name="index.js" Id="_resources_app_index.js_a902af31_8159_423c_9acf_8bcc3f3247f1" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\index.js" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                </Component>
+                <Component Id="_resources_app_index.js.LEGAL.txt_ad758b8a_d520_4f09_996b_627f7a5889e0" Guid="1621fef9-3fe3-492b-98b4-b35a6e88d3d6" Win64="no">
+                  <File Name="index.js.LEGAL.txt" Id="_resources_app_index.js.LEGAL.txt_ad758b8a_d520_4f09_996b_627f7a5889e0" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\index.js.LEGAL.txt" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                </Component>
+                <Component Id="_resources_app_index.js.map_4d806270_2a3e_4621_baeb_5977f21f9efc" Guid="2957e082-eeef-47d2-a8bf-51def813eb55" Win64="no">
+                  <File Name="index.js.map" Id="_resources_app_index.js.map_4d806270_2a3e_4621_baeb_5977f21f9efc" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\index.js.map" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                </Component>
+                <Component Id="_resources_app_manifest.json_1935e6c6_616c_44d6_8f49_cd5a0b073451" Guid="c73e99bd-1f38-403d-b086-c0e296c301b5" Win64="no">
+                  <File Name="manifest.json" Id="_resources_app_manifest.json_1935e6c6_616c_44d6_8f49_cd5a0b073451" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\manifest.json" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                </Component>
+                <Component Id="_resources_app_package.json_973cdd6e_861b_4890_a9b5_73b52010a927" Guid="99c0dcab-c47f-41b1-8303-2e31dd71b417" Win64="no">
+                  <File Name="package.json" Id="_resources_app_package.json_973cdd6e_861b_4890_a9b5_73b52010a927" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources\app\package.json" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+                </Component>
+              </Directory>
+
+            </Directory>
+            <Component Id="_LICENSE_ea7adc2a_6cfa_436a_a617_71c0c2986844" Guid="e2d5c39d-8973-4c26-aece-c9dbe2a92375" Win64="no">
+              <File Name="LICENSE" Id="_LICENSE_ea7adc2a_6cfa_436a_a617_71c0c2986844" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\LICENSE" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+            </Component>
+            <Component Id="_LICENSES.chromium.html_7ba3c2a3_e9d0_42a7_a5d2_b7b2a2a81a7d" Guid="3cf291b4-2ae2-40de-a1be-9d656aed42a1" Win64="no">
+              <File Name="LICENSES.chromium.html" Id="_LICENSES.chromium.html_7ba3c2a3_e9d0_42a7_a5d2_b7b2a2a81a7d" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\LICENSES.chromium.html" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+            </Component>
+            <Component Id="_chrome_100_percent.pak_b6536a6d_9d11_44c9_bdb4_50abfb84567c" Guid="b7bceb24-51dc-487b-9a14-61a0a336f8e3" Win64="no">
+              <File Name="chrome_100_percent.pak" Id="_chrome_100_percent.pak_b6536a6d_9d11_44c9_bdb4_50abfb84567c" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\chrome_100_percent.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+            </Component>
+            <Component Id="_chrome_200_percent.pak_b4e50c6f_c1cb_48ae_a41b_6e104e4c9fbf" Guid="7cd46262-bb18-4874-9a32-1995932f3c92" Win64="no">
+              <File Name="chrome_200_percent.pak" Id="_chrome_200_percent.pak_b4e50c6f_c1cb_48ae_a41b_6e104e4c9fbf" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\chrome_200_percent.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+            </Component>
+            <Component Id="_d3dcompiler_47.dll_04f69779_03dd_4602_b90d_781fe6bddea9" Guid="02ca706b-c9f1-4549-8856-8ac4ea84b17c" Win64="no">
+              <File Name="d3dcompiler_47.dll" Id="_d3dcompiler_47.dll_04f69779_03dd_4602_b90d_781fe6bddea9" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\d3dcompiler_47.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+            </Component>
+            <Component Id="_ffmpeg.dll_4634e4c2_ff0d_40b7_8a96_cd2e9aa3871a" Guid="cb159814-d1b5-4c1a-a41a-7b859982efc0" Win64="no">
+              <File Name="ffmpeg.dll" Id="_ffmpeg.dll_4634e4c2_ff0d_40b7_8a96_cd2e9aa3871a" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\ffmpeg.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+            </Component>
+            <Component Id="_icudtl.dat_559eb37d_ee1d_4126_afe6_45ddae096a52" Guid="87234844-d741-4cdf-8242-9d02965a0795" Win64="no">
+              <File Name="icudtl.dat" Id="_icudtl.dat_559eb37d_ee1d_4126_afe6_45ddae096a52" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\icudtl.dat" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+            </Component>
+            <Component Id="_indian_sign_language_learning_app._214d3d1c_ddbe_44d9_b143_14dfc201e568" Guid="127bfcf7-d7ff-4011-a4e2-12148152a0bb" Win64="no">
+              <File Name="indian-sign-language-learning-app.exe" Id="_indian_sign_language_learning_app._214d3d1c_ddbe_44d9_b143_14dfc201e568" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\indian-sign-language-learning-app.exe" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+            </Component>
+            <Component Id="_libEGL.dll_8b67fa73_a6d6_4b7d_9320_90f62b2de980" Guid="19dd3f71-e0f2-41b8-bb17-53c9835c4c9d" Win64="no">
+              <File Name="libEGL.dll" Id="_libEGL.dll_8b67fa73_a6d6_4b7d_9320_90f62b2de980" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\libEGL.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+            </Component>
+            <Component Id="_libGLESv2.dll_0b9e2b9c_2723_4cb7_9e00_8a931e01ef00" Guid="f435672d-8bbb-476b-95e3-2a2280036a3b" Win64="no">
+              <File Name="libGLESv2.dll" Id="_libGLESv2.dll_0b9e2b9c_2723_4cb7_9e00_8a931e01ef00" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\libGLESv2.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+            </Component>
+            <Component Id="_resources.pak_fc78d35f_1364_4af6_9e1d_2358696d4078" Guid="96ffae1d-bdb4-434b-8571-831237365e28" Win64="no">
+              <File Name="resources.pak" Id="_resources.pak_fc78d35f_1364_4af6_9e1d_2358696d4078" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\resources.pak" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+            </Component>
+            <Component Id="_snapshot_blob.bin_327f3f95_af21_4d25_a07c_8c1522c5ecc5" Guid="063042c5-794c-47c6-9a03-0aac04d3f6f9" Win64="no">
+              <File Name="snapshot_blob.bin" Id="_snapshot_blob.bin_327f3f95_af21_4d25_a07c_8c1522c5ecc5" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\snapshot_blob.bin" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+            </Component>
+            <Component Id="_v8_context_snapshot.bin_b63f84c0_1f7d_4e73_910e_a3f40ff426b4" Guid="dc87b64f-3034-4324-8d77-2b42af77d149" Win64="no">
+              <File Name="v8_context_snapshot.bin" Id="_v8_context_snapshot.bin_b63f84c0_1f7d_4e73_910e_a3f40ff426b4" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\v8_context_snapshot.bin" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+            </Component>
+            <Component Id="_version_aaecda4a_945b_4f00_bb61_990903acd817" Guid="6ee023b9-8c9a-4ada-8eeb-ff8204e7673b" Win64="no">
+              <File Name="version" Id="_version_aaecda4a_945b_4f00_bb61_990903acd817" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\version" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+            </Component>
+            <Component Id="_vk_swiftshader.dll_de6a08dc_9948_44de_809d_714315a693a6" Guid="d74fc00e-8bd2-4cd5-a0a4-de5a75a5e307" Win64="no">
+              <File Name="vk_swiftshader.dll" Id="_vk_swiftshader.dll_de6a08dc_9948_44de_809d_714315a693a6" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\vk_swiftshader.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+            </Component>
+            <Component Id="_vk_swiftshader_icd.json_b6d24d8f_2ddc_475b_9517_b5224ac3edb1" Guid="8f2d02b5-b0d5-4693-ac0d-47104283b4aa" Win64="no">
+              <File Name="vk_swiftshader_icd.json" Id="_vk_swiftshader_icd.json_b6d24d8f_2ddc_475b_9517_b5224ac3edb1" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\vk_swiftshader_icd.json" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+            </Component>
+            <Component Id="_vulkan_1.dll_511c063e_dba1_42e7_8128_f320b4ec2388" Guid="d87abeef-58ec-4287-b8eb-6377a247dbc2" Win64="no">
+              <File Name="vulkan-1.dll" Id="_vulkan_1.dll_511c063e_dba1_42e7_8128_f320b4ec2388" Source="E:\Projects\Major\Final\0002\indian-sign-language-learning-app-win32-x64\vulkan-1.dll" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+            </Component>
+          </Directory>
+          <Component Id="_indian_sign_language_learning_app._5c7008be_2770_4c56_a8b2_8ba1d5c38dbb" Guid="b9b355cc-16b3-4859-96d9-cc5de7bc4fa0" Win64="no">
+            <File Name="indian-sign-language-learning-app.exe" Id="_indian_sign_language_learning_app._5c7008be_2770_4c56_a8b2_8ba1d5c38dbb" Source="C:\Users\DELL\AppData\Local\Temp\indian-sign-language-learning-appy7q5xK\indian-sign-language-learning-app.exe" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+          </Component>
+          <Component Id="_.installInfo.json_1765896e_eeeb_451e_b3e6_201119b67b9d" Guid="4c067f9e-ba91-4325-b31e-7fae00258564" Win64="no">
+            <File Name=".installInfo.json" Id="_.installInfo.json_1765896e_eeeb_451e_b3e6_201119b67b9d" Source="C:\Users\DELL\AppData\Local\Temp\.installInfoKZqoOL\.installInfo.json" KeyPath="yes" Checksum="yes" ProcessorArchitecture="x86"/>
+
+          </Component>
+          <Component Id="RegistryInstallPath" Guid="a7acf453-e170-4058-a6b4-305bd279d530" Win64="no">
+            <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{E5FDBFFB-1A57-480B-88F1-B982F4FE109A}.msq" ForceCreateOnInstall="no" ForceDeleteOnUninstall="yes">
+              <RegistryValue Name="InstallPath" Type="string" Value="[APPLICATIONROOTDIRECTORY]" KeyPath="yes"/>
+            </RegistryKey>
+          </Component>
+          <Component Id="UninstallDisplayName" Guid="063e9e32-55b0-4c2f-80ca-8ad72189469f" Win64="no">
+            <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{E5FDBFFB-1A57-480B-88F1-B982F4FE109A}.msq" ForceCreateOnInstall="no" ForceDeleteOnUninstall="yes">
+              <RegistryValue Name="DisplayName" Type="string" Value="[VisibleProductName]" KeyPath="yes"/>
+            </RegistryKey>
+          </Component>
+          <Component Id="UninstallPublisher" Guid="4ab583b0-15a5-4cb5-ab3b-6f36d4aa5df9" Win64="no">
+            <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{E5FDBFFB-1A57-480B-88F1-B982F4FE109A}.msq" ForceCreateOnInstall="no" ForceDeleteOnUninstall="yes">
+              <RegistryValue Name="Publisher" Type="string" Value="indian-sign-language-learning" KeyPath="yes"/>
+            </RegistryKey>
+          </Component>
+          <Component Id="UninstallDisplayVersion" Guid="c20e5e01-cf0f-4484-a103-b7c4c0446db6" Win64="no">
+            <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{E5FDBFFB-1A57-480B-88F1-B982F4FE109A}.msq" ForceCreateOnInstall="no" ForceDeleteOnUninstall="yes">
+              <RegistryValue Name="DisplayVersion" Type="string" Value="1.0.0" KeyPath="yes"/>
+            </RegistryKey>
+          </Component>
+          <Component Id="UninstallModifyString" Guid="31a431e7-b1f5-4d07-9300-48474bfeb84c" Win64="no">
+            <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{E5FDBFFB-1A57-480B-88F1-B982F4FE109A}.msq" ForceCreateOnInstall="no" ForceDeleteOnUninstall="yes">
+              <RegistryValue Name="ModifyPath" Type="expandable" Value="MsiExec.exe /I {E5FDBFFB-1A57-480B-88F1-B982F4FE109A}" KeyPath="yes"/>
+            </RegistryKey>
+          </Component>
+          <Component Id="UninstallString" Guid="0a6c289e-a794-49d5-8121-c6e75bb867ad" Win64="no">
+            <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{E5FDBFFB-1A57-480B-88F1-B982F4FE109A}.msq" ForceCreateOnInstall="no" ForceDeleteOnUninstall="yes">
+              <RegistryValue Name="UninstallString" Type="expandable" Value="MsiExec.exe /X {E5FDBFFB-1A57-480B-88F1-B982F4FE109A}" KeyPath="yes"/>
+            </RegistryKey>
+          </Component>
+          <Component Id="UninstallDisplayIcon" Guid="49cd1996-448c-44be-b6b8-7cc6e0e8fbd0" Win64="no">
+            <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{E5FDBFFB-1A57-480B-88F1-B982F4FE109A}.msq" ForceCreateOnInstall="no" ForceDeleteOnUninstall="yes">
+              <RegistryValue Name="DisplayIcon" Type="expandable" Value="[APPLICATIONROOTDIRECTORY]indian-sign-language-learning-app.exe" KeyPath="yes"/>
+            </RegistryKey>
+          </Component>
+        </Directory>
+      </Directory>
+
+      <!-- Desktop -->
+      <Directory Id="DesktopFolder" Name="Desktop" />
+
+      <!-- Start Menu -->
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="indian-sign-language-learning"/>
+      </Directory>
+    </Directory>
+
+    <!-- Step 3: Add app to Start Menu -->
+    <DirectoryRef Id="ApplicationProgramsFolder">
+      <Component Id="ApplicationShortcut" Guid="32acac03-e622-4f55-bd47-486331135d2f" Win64="no">
+        <Shortcut Id="ApplicationStartMenuShortcut"
+                  Name="indian-sign-language-learning-app"
+                  Description="Indian Sign Language learning app with AI"
+                  Target="[APPLICATIONROOTDIRECTORY]indian-sign-language-learning-app.exe"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY">
+          <ShortcutProperty Key="System.AppUserModel.ID" Value="com.squirrel.indian-sign-language-learning-app.indian-sign-language-learning-app"/>
+        </Shortcut>
+        <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
+        <RegistryValue Root="HKCU"
+                       Key="Software\Microsoft\indian-sign-language-learning-app"
+                       Name="installed"
+                       Type="integer"
+                       Value="1"
+                       KeyPath="yes"/>
+      </Component>
+    </DirectoryRef>
+
+   <!-- Step 4: Add app desktop shortcut --> 
+    <DirectoryRef Id="DesktopFolder">
+      <Component Id="DesktopShortcut" Guid="0cca53b2-feed-46ae-928c-7553d2a9d9d1" >
+          <Shortcut Id="MyDesktopShortcut"
+                    Name="indian-sign-language-learning-app"
+                    Description="Indian Sign Language learning app with AI"
+                    Target="[APPLICATIONROOTDIRECTORY]indian-sign-language-learning-app.exe"
+                    WorkingDirectory="APPLICATIONROOTDIRECTORY"/>
+          <RegistryValue Root="HKCU"
+                    Key="Software\Microsoft\indian-sign-language-learning-app"
+                    Name="installed"
+                    Type="integer"
+                    Value="1"
+                    KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+
+
+    <!-- Lets cleanup any files that are were not part of the initial install
+    via this MSI. Such as newer versions installed by the auto-updater. -->
+    <DirectoryRef Id="APPLICATIONROOTDIRECTORY">
+      <Component Id="PurgeOnUninstall" Guid="938c0e7b-dbbc-4af3-842f-9dbfc1b985c6" Win64="no">
+        <CreateFolder/>
+        <util:RemoveFolderEx On="uninstall" Property="INSTALLPATH" />
+      </Component>
+    </DirectoryRef>
+
+    <Feature Id="Complete" Title="indian-sign-language-learning-app (1.0.0)" Description="The complete package." Display="expand" Level="1" >
+      <!-- Step 5: Tell WiX to install the files -->
+      <Feature Id="MainApplication" Title="Main Application" Level="1" Description="The main components to run the applications." >
+        <ComponentRef Id="_locales_af.pak_79918175_9e2f_470a_b2ce_b325737d281b" />
+        <ComponentRef Id="_locales_am.pak_c1fe14cd_2b6a_4116_9c34_e4e199a9dd20" />
+        <ComponentRef Id="_locales_ar.pak_0e421559_1cb7_41ac_87ef_af58cc7f4c42" />
+        <ComponentRef Id="_locales_bg.pak_cf38666e_a132_40a3_800e_4366e78f608e" />
+        <ComponentRef Id="_locales_bn.pak_525831a3_2fcb_4de7_aadb_dbb7e7610b9d" />
+        <ComponentRef Id="_locales_ca.pak_4b1be59a_d7cd_4c9d_9364_e98e8fc33f71" />
+        <ComponentRef Id="_locales_cs.pak_ef219499_2347_46a6_85c9_23fa920b8b69" />
+        <ComponentRef Id="_locales_da.pak_fa80bf7f_faef_4113_9988_53eba862191e" />
+        <ComponentRef Id="_locales_de.pak_3e81fcaa_dfb9_4944_95f1_ee24f6cc6fde" />
+        <ComponentRef Id="_locales_el.pak_6d7c6510_4742_4cfa_a5d5_478d1b33dea6" />
+        <ComponentRef Id="_locales_en_GB.pak_03c44493_cac5_4728_9d62_5dcba1f12366" />
+        <ComponentRef Id="_locales_en_US.pak_bf919769_e8cd_47aa_b91a_554b5e843170" />
+        <ComponentRef Id="_locales_es_419.pak_a6c76183_cbe6_45e8_975b_de04f067f9aa" />
+        <ComponentRef Id="_locales_es.pak_0221e02a_3aaf_49f6_b48c_3b04928c5fce" />
+        <ComponentRef Id="_locales_et.pak_38551509_7e04_45fa_9519_0e4be6ca3e81" />
+        <ComponentRef Id="_locales_fa.pak_e79fbe08_5d2f_4bd5_9c4c_2a26e4cb9f35" />
+        <ComponentRef Id="_locales_fi.pak_54591b55_5ef8_4f4a_a2e9_be5a5b04da77" />
+        <ComponentRef Id="_locales_fil.pak_21d568eb_0b89_40da_a1b4_9054ea0fb6db" />
+        <ComponentRef Id="_locales_fr.pak_98dadf4e_aacc_4fea_985b_40bd19a86469" />
+        <ComponentRef Id="_locales_gu.pak_52810093_3ec8_473b_b1d2_f5754438a119" />
+        <ComponentRef Id="_locales_he.pak_75157cca_a0e6_446b_9a61_88c9582e6192" />
+        <ComponentRef Id="_locales_hi.pak_39da0f81_de58_49b5_9aad_83439147ea83" />
+        <ComponentRef Id="_locales_hr.pak_038d1f4f_8b79_4988_a0c7_8290cf5641d0" />
+        <ComponentRef Id="_locales_hu.pak_4d42b11a_ec37_4fbc_abdd_637ba330e983" />
+        <ComponentRef Id="_locales_id.pak_1fbe8e75_fa15_4887_a2b5_c5aa26dba8c2" />
+        <ComponentRef Id="_locales_it.pak_48758111_d3f5_412c_8e62_cf7d9296ac2f" />
+        <ComponentRef Id="_locales_ja.pak_68fccf33_8cd8_44f6_955e_7d438511ca35" />
+        <ComponentRef Id="_locales_kn.pak_fb9ddd9d_8651_47d8_ae25_db4d8e518f6f" />
+        <ComponentRef Id="_locales_ko.pak_cc61d4cf_bbd8_4571_af26_0299d2010ef2" />
+        <ComponentRef Id="_locales_lt.pak_6a10ccc5_5433_4899_8f4c_1bc9ed6e5235" />
+        <ComponentRef Id="_locales_lv.pak_eee69f8d_2e49_49cb_9801_ba103cde2366" />
+        <ComponentRef Id="_locales_ml.pak_e9e7d8b0_ec36_4d97_a0a9_b7ca16ea13a8" />
+        <ComponentRef Id="_locales_mr.pak_a8699b82_0aa2_46c1_91a2_a2db4852b9cf" />
+        <ComponentRef Id="_locales_ms.pak_82750844_6769_4b00_9f29_cda31575cb24" />
+        <ComponentRef Id="_locales_nb.pak_ae6a3943_5f04_44da_8eaf_cdd756c1986e" />
+        <ComponentRef Id="_locales_nl.pak_bc55e6dd_5947_46a0_8a5d_f745df8900f9" />
+        <ComponentRef Id="_locales_pl.pak_2fbce212_7cf1_4a1f_8d32_ea80d4166362" />
+        <ComponentRef Id="_locales_pt_BR.pak_1e154f05_ee5b_4a11_a528_f9960d56cfb5" />
+        <ComponentRef Id="_locales_pt_PT.pak_f62b0248_0aa5_4134_a161_204b8a343431" />
+        <ComponentRef Id="_locales_ro.pak_2c2724f5_4b9f_463b_8533_df66c5f21176" />
+        <ComponentRef Id="_locales_ru.pak_929d32bf_97d5_4092_96cb_35805daba234" />
+        <ComponentRef Id="_locales_sk.pak_28458162_7253_4458_b712_7f18bb797f72" />
+        <ComponentRef Id="_locales_sl.pak_c6c602b3_86a1_4d00_8c77_d99d76eb50ed" />
+        <ComponentRef Id="_locales_sr.pak_0049cfbe_3ac8_448a_a073_ece81bdbbd14" />
+        <ComponentRef Id="_locales_sv.pak_5d3927a5_711c_4607_abd0_360bbf8eb982" />
+        <ComponentRef Id="_locales_sw.pak_294a5c02_5e73_49ca_ab5f_e47f71785ed3" />
+        <ComponentRef Id="_locales_ta.pak_30dd402c_309c_447c_b534_4c5857b009e9" />
+        <ComponentRef Id="_locales_te.pak_4bbc40f3_4ced_46ee_9cdc_2955b731b2e7" />
+        <ComponentRef Id="_locales_th.pak_c6ac918e_c1b5_4936_a222_e949f9615c0c" />
+        <ComponentRef Id="_locales_tr.pak_61ffd315_c8a4_430a_a9af_ff5d996b775b" />
+        <ComponentRef Id="_locales_uk.pak_32c3dc03_0257_45d4_a136_1dcd51f9d8b7" />
+        <ComponentRef Id="_locales_ur.pak_e43b5bcc_4e0e_42aa_8e7b_3447b89808e1" />
+        <ComponentRef Id="_locales_vi.pak_60935c65_65ab_4576_9579_e9dfd0b9e713" />
+        <ComponentRef Id="_locales_zh_CN.pak_00120a04_7eb9_4efa_bbcf_06648e5af925" />
+        <ComponentRef Id="_locales_zh_TW.pak_72ca67e6_8bc3_4644_afbc_7e6846f23872" />
+        <ComponentRef Id="_A.tflite_4a6f4fd7_4985_4858_888c_6a40f4e182e0" />
+        <ComponentRef Id="_B.tflite_8ed05519_b34a_424f_be8e_14862366571e" />
+        <ComponentRef Id="_C.tflite_e4997279_dbfd_4949_837a_8f2a3d340e83" />
+        <ComponentRef Id="_D.tflite_b23a3209_b463_4fd0_99ad_2f2176a50041" />
+        <ComponentRef Id="_E.tflite_5ab9ec4b_307e_417b_be96_3aa66b470b81" />
+        <ComponentRef Id="_F.tflite_de6cbd9a_7bbd_4443_adb2_f0048bbb1d39" />
+        <ComponentRef Id="_G.tflite_ea6ef80b_f040_46f5_bdba_439e438cb537" />
+        <ComponentRef Id="_H.tflite_0e5cb1ac_72ff_442a_8377_9046e55dd513" />
+        <ComponentRef Id="_I.tflite_58fb5f39_36ac_482e_a656_c13b0c8238f1" />
+        <ComponentRef Id="_J.tflite_50d509a9_3acc_4415_856d_68ce6180a25a" />
+        <ComponentRef Id="_K.tflite_c5d346e6_9213_4510_98ae_7770560c855b" />
+        <ComponentRef Id="_L.tflite_025ace4c_10f1_4de1_8bec_e2d817bf1dd4" />
+        <ComponentRef Id="_M.tflite_56b6cff5_cacc_4a06_b31c_c5a97b1563a2" />
+        <ComponentRef Id="_N.tflite_57ea84f9_93fc_4e72_a7d4_df8851fc30bb" />
+        <ComponentRef Id="_O.tflite_335c5f82_e4ac_412a_8b00_4a06da42ad11" />
+        <ComponentRef Id="_P.tflite_09f9ddf8_ce16_4ffb_a02d_eb100e952f50" />
+        <ComponentRef Id="_Q.tflite_64e72c1f_8c94_473f_be8e_07ae8f35b27b" />
+        <ComponentRef Id="_R.tflite_a7d1b84e_1bd7_4a9f_90ff_0c3b7ad7acd1" />
+        <ComponentRef Id="_S.tflite_2ef53bdc_b743_44e3_aa1d_738a8325905f" />
+        <ComponentRef Id="_T.tflite_c1372d52_24ef_4243_8d2c_06625979e5f4" />
+        <ComponentRef Id="_U.tflite_42a351c6_ad71_4112_8153_51a7cae99b96" />
+        <ComponentRef Id="_V.tflite_90c13e19_3b58_46b8_8a76_0eebf679ea9a" />
+        <ComponentRef Id="_W.tflite_c196a231_7211_4c0c_a102_9452e484e9f8" />
+        <ComponentRef Id="_X.tflite_1868064d_fe9e_4271_9d19_17f138eef59b" />
+        <ComponentRef Id="_Y.tflite_39039dcf_522a_4af1_b5bd_d858d2399ec2" />
+        <ComponentRef Id="_Z.tflite_71ad8c97_19db_41f9_bcc2_7f5f7cf923bd" />
+        <ComponentRef Id="_0.tflite_8523a366_a09f_4a55_915d_b075d9bc6643" />
+        <ComponentRef Id="_1.tflite_f4634d93_b0e2_4cd7_9076_7c7fd9bfa425" />
+        <ComponentRef Id="_2.tflite_8a2b01ed_6ef9_4fa0_8e99_88b60e8ef095" />
+        <ComponentRef Id="_3.tflite_47f4cf86_46b4_4411_9367_6cb2ed6284da" />
+        <ComponentRef Id="_4.tflite_e32550ae_c91a_4f50_a5ae_7e48f6ca460f" />
+        <ComponentRef Id="_5.tflite_7c7a6b41_3f52_40d8_9654_f6b9190d6353" />
+        <ComponentRef Id="_6.tflite_d4748bf5_bc21_46f4_91c0_0e87fe1f963e" />
+        <ComponentRef Id="_7.tflite_23c37c9a_a5bb_4b20_8b3a_d9a78b047d4f" />
+        <ComponentRef Id="_8.tflite_b59f5e46_4e1f_4d29_bc06_0f24393a802e" />
+        <ComponentRef Id="_9.tflite_272aaa88_a057_43a2_a216_d4e0d0c0b64a" />
+        <ComponentRef Id="__hello.tflite_ee3f974f_0ddd_44ea_a140_9e08f43eb2a4" />
+        <ComponentRef Id="__indian.tflite_1f6a29d1_bc9c_4fec_8908_841a04f82202" />
+        <ComponentRef Id="__man.tflite_49caef96_93fa_4e5b_8c3e_d5996cf5f6d1" />
+        <ComponentRef Id="__me.tflite_24644d92_ed48_4728_9ce5_e1158985f59f" />
+        <ComponentRef Id="__thankyou.tflite_f39f0391_234e_48b7_af98_ecb4b34f7c25" />
+        <ComponentRef Id="__welcome.tflite_f5ba228f_cfa9_417b_95c0_92897eabfc05" />
+        <ComponentRef Id="__woman.tflite_31aceb9c_296e_45ee_ab5c_c87d6475d6a9" />
+        <ComponentRef Id="__you.tflite_34d99f1f_8f05_49c3_9666_a20cea847803" />
+        <ComponentRef Id="_resources_app_Models_predCutOff.ts_632ac69d_51ba_48e6_bd07_8780e87625bf" />
+        <ComponentRef Id="_index.html_7cb1dfb2_2d9d_41a4_b7a6_949ae806fafb" />
+        <ComponentRef Id="_style.css_3d6ce7c7_9fcc_4366_bac1_2fc7ffd983f7" />
+        <ComponentRef Id="_resources_app_Pages_Home_index.css_1b0c720e_2af0_4616_b267_65561b232124" />
+        <ComponentRef Id="_index.html_98b72ce8_20cb_477c_8762_0977f9749e71" />
+        <ComponentRef Id="_index.html_a77f0d8b_b8ac_468b_bde7_c98f88553321" />
+        <ComponentRef Id="_style.css_d32848b5_742b_4325_a78f_cf1ea4c50c88" />
+        <ComponentRef Id="_index.html_65215e51_8f63_491f_b813_d567b4d30605" />
+        <ComponentRef Id="_main.js_6eff299f_dc85_46ee_91e2_da64314f0435" />
+        <ComponentRef Id="_main.js.LEGAL.txt_3b8a91fd_f455_4bcf_86d7_749437d33557" />
+        <ComponentRef Id="_main.js.map_dd955238_be85_4333_bacf_a3c7c5ef4dff" />
+        <ComponentRef Id="_practice.css_a690613d_8aeb_44e7_8ffc_2b829e48054d" />
+        <ComponentRef Id="_tflite_web_api_cc.wasm_5a20bbc5_8bb0_467f_9589_8b4338bcf1dc" />
+        <ComponentRef Id="_tflite_web_api_cc_simd.js_5801af75_3ff8_4371_bf1d_562ad3a74a43" />
+        <ComponentRef Id="_tflite_web_api_cc_simd.wasm_3f1dc0e2_9dff_481d_9bb9_2a2a4a98ba6c" />
+        <ComponentRef Id="_tflite_web_api_cc_simd_threaded.js_0b01810a_c72e_4c82_8d11_ca7cb97b6fcd" />
+        <ComponentRef Id="_tflite_web_api_cc_simd_threaded.wa_54bfdb6b_a9cf_4ffe_9188_99b4aaefd84b" />
+        <ComponentRef Id="_tflite_web_api_cc_simd_threaded.wo_f5583a10_ca29_4e55_aa67_47db04215ef5" />
+        <ComponentRef Id="_tflite_web_api_cc_threaded.js_fa506102_c30d_4476_b815_1e661c1dfb16" />
+        <ComponentRef Id="_tflite_web_api_cc_threaded.wasm_425bfcf2_1786_4458_8388_a97f8c0c8ba2" />
+        <ComponentRef Id="_tflite_web_api_cc_threaded.worker._5b994f4c_e058_4854_b635_02e6db16c141" />
+        <ComponentRef Id="_index.html_00a57eee_936a_4eff_874b_a810b5e109f7" />
+        <ComponentRef Id="_main.js_3beedd20_3cd9_40f9_b896_b6a31365c1c7" />
+        <ComponentRef Id="_main.js.LEGAL.txt_ea9b8758_6dc6_4d7e_8bbe_02c0d84da236" />
+        <ComponentRef Id="_main.js.map_a54a9327_a7c5_44ea_9eb1_48734906c5db" />
+        <ComponentRef Id="_selection.css_40455da4_aff6_4489_ae3a_9dfa7ed6ae00" />
+        <ComponentRef Id="_resources_app_Pages_index.html_a3c5e57d_3934_4de9_b3c8_6000fda6907e" />
+        <ComponentRef Id="_hand_landmark_full.tflite_ed8636ef_b04d_4547_904c_a1b77860cd9a" />
+        <ComponentRef Id="_hand_landmark_lite.tflite_b305ab53_5b35_424e_bb95_507667e6b68d" />
+        <ComponentRef Id="_hands.binarypb_46e36c97_21f1_4bcf_b4d3_f79e29a1cf67" />
+        <ComponentRef Id="_hands_solution_packed_assets.data_2e880ba1_f041_4c6f_8202_a8eafbd7365d" />
+        <ComponentRef Id="_hands_solution_packed_assets_loade_83524678_4a88_4ae5_9b1e_7e6da9076a4f" />
+        <ComponentRef Id="_hands_solution_simd_wasm_bin.data_a3b017bf_7e75_4006_81a3_efddbc20a2f6" />
+        <ComponentRef Id="_hands_solution_simd_wasm_bin.js_c3f0df8f_2dec_4e62_a62d_b2b608c30042" />
+        <ComponentRef Id="_hands_solution_simd_wasm_bin.wasm_1593a052_0c03_4a42_9821_ad644deaa983" />
+        <ComponentRef Id="_hands_solution_wasm_bin.js_fd3581dd_0c64_4b0e_be3b_89cbf23d89e3" />
+        <ComponentRef Id="_hands_solution_wasm_bin.wasm_2d0339c8_b7d3_484e_8d2b_4e1d73ece427" />
+        <ComponentRef Id="_pose_landmark_full.tflite_93eade20_4a21_4fae_b807_bb8b36d3ecd5" />
+        <ComponentRef Id="_pose_landmark_heavy.tflite_c7a94fb0_1504_4100_b3c8_b99c7db5573d" />
+        <ComponentRef Id="_pose_landmark_lite.tflite_2a5e3cdc_d915_4a7d_b1fe_4bfc9c7f3519" />
+        <ComponentRef Id="_pose_solution_packed_assets.data_2bd99b27_38af_4d4b_88db_793de5cbd91e" />
+        <ComponentRef Id="_pose_solution_packed_assets_loader_bab82f21_ca49_4dd9_93a5_746ecb49ba46" />
+        <ComponentRef Id="_pose_solution_simd_wasm_bin.data_ba3a3652_527f_4822_8afe_cfaa762b3217" />
+        <ComponentRef Id="_pose_solution_simd_wasm_bin.js_6f14e300_2cd8_427b_8690_0ed72f9cd434" />
+        <ComponentRef Id="_pose_solution_simd_wasm_bin.wasm_6c48e909_1f5f_4654_b2f0_9f13e754a522" />
+        <ComponentRef Id="_pose_solution_wasm_bin.js_4fa3514d_4aba_4008_89f4_bb1c439345e4" />
+        <ComponentRef Id="_pose_solution_wasm_bin.wasm_8b57f5d1_9e85_4c90_aa81_8743a0afc09a" />
+        <ComponentRef Id="_pose_web.binarypb_498a56ac_56ce_41fc_b10b_197bb485a047" />
+        <ComponentRef Id="_tflite_web_api_cc.wasm_b8722742_b882_45a3_83fe_b2e788ff0d97" />
+        <ComponentRef Id="_tflite_web_api_cc_simd.js_8442c287_d8e8_421d_9a51_a8c046f2d895" />
+        <ComponentRef Id="_tflite_web_api_cc_simd.wasm_888370f2_be80_457c_ac99_222873ec583c" />
+        <ComponentRef Id="_tflite_web_api_cc_simd_threaded.js_7d062ecd_f6d6_40c5_98e4_a116e157fc9d" />
+        <ComponentRef Id="_tflite_web_api_cc_simd_threaded.wa_c37dc140_8ef8_4d72_af7c_4bf6edecf21a" />
+        <ComponentRef Id="_tflite_web_api_cc_simd_threaded.wo_d4adb179_ff76_4eac_8615_63a211e50a59" />
+        <ComponentRef Id="_tflite_web_api_cc_threaded.js_6dbad221_f814_44ae_a81b_c60e579c6659" />
+        <ComponentRef Id="_tflite_web_api_cc_threaded.wasm_32847b23_b3a1_4b15_83cf_7d6260f9755f" />
+        <ComponentRef Id="_tflite_web_api_cc_threaded.worker._b88eab3d_94f6_4bbc_ba0a_71ca53aa80d7" />
+        <ComponentRef Id="_bg_pop_1.jpg_b60c7a7e_69b3_49cf_9b18_33ea690494f2" />
+        <ComponentRef Id="_bg_pop_2.jpg_a33f7114_0421_45d7_92c9_5b9c89d6a9a1" />
+        <ComponentRef Id="_bg_pop_3.jpg_12d62391_e682_44c2_b460_94b7d8a2e14e" />
+        <ComponentRef Id="_img1.jpg_99622e38_805b_4d02_be03_5abc141e1c28" />
+        <ComponentRef Id="_seamless_pattern_02.svg_fc2eb53e_2588_4c63_9409_031709f22636" />
+        <ComponentRef Id="_kaanda.png_2870b6dd_b824_4265_821f_a23e44f119d0" />
+        <ComponentRef Id="_kaddu.png_74217951_1a2b_4211_a273_33ff9b818da0" />
+        <ComponentRef Id="_lassan.png_3e483df7_2c48_4a88_bb09_94c30c5528d0" />
+        <ComponentRef Id="_singhada.png_909365fe_4fff_4521_9634_c5f9b071657a" />
+        <ComponentRef Id="_bg_pop_2.jpg_0629996e_84e1_4449_82a3_124eefe072b4" />
+        <ComponentRef Id="_favicon.ico_c69a09cc_bc15_43f7_a776_4befa1b32557" />
+        <ComponentRef Id="_favicon_16.png_41ba2c1d_fcbe_41a3_aa6a_46a89d69c229" />
+        <ComponentRef Id="_favicon_180.png_c51a42c2_b311_40c2_a45d_0c12bb911dd0" />
+        <ComponentRef Id="_favicon_192.png_999362ae_c778_413b_8edd_bf09d2103c99" />
+        <ComponentRef Id="_favicon_32.png_a12ca6a0_4597_4f63_8b72_03db212a0226" />
+        <ComponentRef Id="_favicon_512.png_3fe2d020_4167_4c28_985d_ffa1856d1fca" />
+        <ComponentRef Id="_site.webmanifest_361b26e6_33c8_4aa1_ad5a_12848308ecb8" />
+        <ComponentRef Id="_bg_pop_2.jpg_fcad39aa_cbd2_4cac_97ab_25f2ee9a92db" />
+        <ComponentRef Id="_menu_closed.png_c54823af_a2a6_4f8d_a929_06cac85d3aeb" />
+        <ComponentRef Id="_menu_open.png_94ee1454_6753_4ac6_8fc3_c4627afd40d7" />
+        <ComponentRef Id="_no_hand.png_a8020702_7275_4f86_b193_9f5e35782e2b" />
+        <ComponentRef Id="_practice.png_860f6279_09f3_467d_8a5a_630987c01bcf" />
+        <ComponentRef Id="_right.png_728ac49b_8c04_4056_935b_a5f391b0a348" />
+        <ComponentRef Id="_wrong.png_5db956a0_7cc1_4f81_bf7a_2b32de490035" />
+        <ComponentRef Id="_check_solid.svg_7e8548ba_06a2_4c5d_8733_cbefbc14af96" />
+        <ComponentRef Id="_circle_chevron_right_solid.svg_8fb1c518_3c13_4e32_a1cd_b9dba8eb26ba" />
+        <ComponentRef Id="_down.svg_69dce4eb_f755_41ad_b38b_d3e8d158159b" />
+        <ComponentRef Id="_question_solid.svg_cdbe03bc_28ee_4e85_9622_afd4fd9017e3" />
+        <ComponentRef Id="_xmark_solid.svg_230853be_3f35_43f9_b37c_489c5178f975" />
+        <ComponentRef Id="_0_cam.jpg_550469e1_46e0_4eea_9661_de6db6d9a174" />
+        <ComponentRef Id="_1_cam.jpg_6f710d9f_425a_468c_8cd9_40cf233d50d5" />
+        <ComponentRef Id="_2_cam.jpg_a760c729_5fab_4007_8e71_402492ef8f58" />
+        <ComponentRef Id="_3_cam.jpg_0eec97fe_57b0_4f32_923c_f10d4de90c0f" />
+        <ComponentRef Id="_4_cam.jpg_a93426b0_0c84_4fed_b3e0_c9c6265e4d1a" />
+        <ComponentRef Id="_5_cam.jpg_dfe07491_e287_4811_86a4_db0a151ba18f" />
+        <ComponentRef Id="_6_cam.jpg_23efe2be_ded8_4da5_9601_17d89dce8313" />
+        <ComponentRef Id="_7_cam.jpg_74dd4b28_7c8d_429f_84b1_2c06633014a0" />
+        <ComponentRef Id="_8_cam.jpg_71d9fac3_8b04_414b_97d2_9bebf84c2367" />
+        <ComponentRef Id="_9_cam.jpg_5fd4f67f_6337_494b_983d_21b682fb40ce" />
+        <ComponentRef Id="__Hello_cam.jpg_2b00f1dd_75d0_4a0d_a93d_5aee4d40a7a0" />
+        <ComponentRef Id="__I_cam.jpg_09048be9_2ef0_4740_9b91_0f86890b91d7" />
+        <ComponentRef Id="__India_cam.jpg_80df296b_3c18_483c_92de_c824101b5567" />
+        <ComponentRef Id="__Man_cam.jpg_9a600610_3ea2_4bf2_a73a_e09565d6a9bb" />
+        <ComponentRef Id="__ThankYou_cam.jpg_cabcdefc_8ac7_4aee_a4cf_5dd4f8a2b1c4" />
+        <ComponentRef Id="__Woman_cam.jpg_cecb36a8_4073_488b_812d_13c68dd496e0" />
+        <ComponentRef Id="__You_cam.jpg_491a27f8_e70e_42c6_9e6a_700620c0ec9e" />
+        <ComponentRef Id="__welcome_cam.jpg_d4cf8f3a_4ce6_4b9d_b351_b79437c31ad4" />
+        <ComponentRef Id="_a_cam.jpg_52ceff6d_6a7f_4eb0_ad10_793af79da524" />
+        <ComponentRef Id="_b_cam.jpg_c6ec6314_c9da_459a_8f1b_a81e3f6c7424" />
+        <ComponentRef Id="_c_cam.jpg_02666eda_37ba_4e66_9ed9_9a6d44cbca0c" />
+        <ComponentRef Id="_d_cam.jpg_05c1c15a_dc77_4472_91dc_041eab4bdc27" />
+        <ComponentRef Id="_e_cam.jpg_8e284c38_8a54_4780_92f0_ccbb0423286f" />
+        <ComponentRef Id="_f_cam.jpg_39c4bf56_89e1_4985_89b4_80ccec9bdf3c" />
+        <ComponentRef Id="_g_cam.jpg_5ab7be5a_6f89_4e94_b7af_9c04d254674d" />
+        <ComponentRef Id="_h_cam.jpg_a2f27bb3_8c60_490e_866e_4bfbcf97424e" />
+        <ComponentRef Id="_i_cam.jpg_11f4e2d5_e563_4b15_a426_88f8782bc0eb" />
+        <ComponentRef Id="_j_cam.jpg_210b8896_9970_4aa0_a93d_f9769c79ba7c" />
+        <ComponentRef Id="_k_cam.jpg_9324248c_4464_467e_88da_cc9ba2119255" />
+        <ComponentRef Id="_l_cam.jpg_149d35c4_1966_4e19_851c_0e37140fbea3" />
+        <ComponentRef Id="_m_cam.jpg_32f91bc9_f5fc_41ca_8c2b_8bf9d45e3770" />
+        <ComponentRef Id="_n_cam.jpg_87ea829a_e0a2_42b6_ab89_bbdd44c3cce7" />
+        <ComponentRef Id="_o_cam.jpg_01781446_23fe_43bf_baa8_4d93066e6e33" />
+        <ComponentRef Id="_p_cam.jpg_0b917f43_f1ca_4f5b_bc21_edd6db14943f" />
+        <ComponentRef Id="_q_cam.jpg_1ff5671a_a444_4cf7_b959_ca9fa3eb5f02" />
+        <ComponentRef Id="_r_cam.jpg_eb8e8058_e832_4927_93a0_8dc838c0779d" />
+        <ComponentRef Id="_s_cam.jpg_5d44aa6d_cf44_4762_8f50_771a9cdca8e3" />
+        <ComponentRef Id="_t_cam.jpg_83bd970f_7f77_4fa3_8fca_7f8c95f2355e" />
+        <ComponentRef Id="_u_cam.jpg_1c9c866d_b7c5_4f07_95c6_0ba938e7d5a8" />
+        <ComponentRef Id="_v_cam.jpg_8e594153_40d5_4e40_88b3_d009b265871a" />
+        <ComponentRef Id="_w_cam.jpg_09b5d2bb_b47d_420d_9654_a5c788eb934e" />
+        <ComponentRef Id="_x_cam.jpg_b85e7f17_b84c_4131_91bd_ff6fd806198b" />
+        <ComponentRef Id="_y_cam.jpg_9c73b8b0_99b0_4a0a_83fe_94546c0e492c" />
+        <ComponentRef Id="_z_cam.jpg_63e8cb9e_bdf1_4aa2_9ac0_bfede21c612a" />
+        <ComponentRef Id="_0_self.jpg_1b9285a0_4978_4a79_b3e0_9aa929c6f56b" />
+        <ComponentRef Id="_1_self.jpg_007a0860_b5c1_4221_acc2_fbb44b0b91f0" />
+        <ComponentRef Id="_2_self.jpg_233f61f9_1548_4a34_8a1b_887b3648182b" />
+        <ComponentRef Id="_3_self.jpg_f9df0719_1b55_4330_a974_4643d54eab5c" />
+        <ComponentRef Id="_4_self.jpg_5dc995f3_0d02_43b2_bf4c_b2b8d6ed0504" />
+        <ComponentRef Id="_5_self.jpg_c096a30c_13c6_426f_a2d3_23474e5e0d76" />
+        <ComponentRef Id="_6_self.jpg_d5d622e6_1ac3_4944_ab4f_233b228c3653" />
+        <ComponentRef Id="_7_self.jpg_b67b6f98_6833_4621_a43c_8070f9325f1b" />
+        <ComponentRef Id="_8_self.jpg_63293896_7c4b_482b_b6d2_a69283874158" />
+        <ComponentRef Id="_9_self.jpg_0f175fa6_1818_4608_a468_dcd5d45d3d01" />
+        <ComponentRef Id="__Hello_self.jpg_7e9c2966_4dec_45d9_957c_e5a1c3c1300b" />
+        <ComponentRef Id="__I_self.jpg_eccc906b_06ad_40ce_8800_b2e82348e25e" />
+        <ComponentRef Id="__India_self.jpg_8c486c8a_b450_4b4a_a820_8a23b2ddc968" />
+        <ComponentRef Id="__Man_self.jpg_181f7788_25cb_4c86_b4cc_74cb3e4898f9" />
+        <ComponentRef Id="__ThankYou_self.jpg_99ae2b08_d11c_4891_bb48_d8a196bb2e53" />
+        <ComponentRef Id="__Woman_self.jpg_d7a81b48_1270_4b80_bc65_dc6dece64d2a" />
+        <ComponentRef Id="__You_self.jpg_f2a77e85_3af7_42c2_8f57_e0380bf0b9ec" />
+        <ComponentRef Id="__welcome_self.jpg_7f40c60e_8a13_4889_8d1b_ad7aa77705b2" />
+        <ComponentRef Id="_a_self.jpg_687159a0_7d64_4daa_8f6d_4009d64c98fd" />
+        <ComponentRef Id="_b_self.jpg_03415ce9_78be_42dc_9f6f_706e872836d0" />
+        <ComponentRef Id="_c_self.jpg_33d43464_30cf_43bc_ab94_12f99dddca63" />
+        <ComponentRef Id="_d_self.jpg_02dfcd6d_9a42_4878_8c84_6c40899f65e9" />
+        <ComponentRef Id="_e_self.jpg_ced00c2f_1ee8_4aaf_a5b6_2beaf33a5dd4" />
+        <ComponentRef Id="_f_self.jpg_5db5c6a7_ce2e_46b7_8764_5e49e9e82b15" />
+        <ComponentRef Id="_g_self.jpg_8ffc70dd_2ee3_4734_8505_a7bfaf7ed843" />
+        <ComponentRef Id="_h_self.jpg_94def048_3ab0_40a3_992e_6a7250f1dc37" />
+        <ComponentRef Id="_i_self.jpg_363b0599_5a92_4dad_a0be_b81e85bcb0e1" />
+        <ComponentRef Id="_j_self.jpg_2476bc4c_d1a8_4004_9503_fad244a30d22" />
+        <ComponentRef Id="_k_self.jpg_76ca9230_0cbd_4e42_9a17_eb5a68eb8d34" />
+        <ComponentRef Id="_l_self.jpg_0d3cf7ca_63ea_40b5_a802_a1b63ac2b091" />
+        <ComponentRef Id="_m_self.jpg_080025c2_6173_4861_b107_147e66765564" />
+        <ComponentRef Id="_n_self.jpg_85616a3d_eef1_4c9d_9d03_e421c7707fdf" />
+        <ComponentRef Id="_o_self.jpg_d3dd1dd2_a743_4ff0_af81_c4901fe9051a" />
+        <ComponentRef Id="_p_self.jpg_8cbac03d_cf94_42b6_b8c8_f9ee617e345f" />
+        <ComponentRef Id="_q_self.jpg_949f2520_c6bc_4671_b6bf_ef62362d3639" />
+        <ComponentRef Id="_r_self.jpg_17788fe9_8687_4508_8d18_add55cf0d808" />
+        <ComponentRef Id="_s_self.jpg_4906d820_468a_4ac8_88f1_07235ad08fb6" />
+        <ComponentRef Id="_t_self.jpg_8b886305_a57b_41c9_885a_8d3b431741e1" />
+        <ComponentRef Id="_u_self.jpg_4fbe1104_bf88_4ef0_9d8a_76b38c2bf73d" />
+        <ComponentRef Id="_v_self.jpg_27706ae5_309c_4d96_a351_81e9f0b7f2b0" />
+        <ComponentRef Id="_w_self.jpg_abbb5ac9_98e1_41c7_afbc_1b5fc260ed00" />
+        <ComponentRef Id="_x_self.jpg_b4872a18_3bfc_4bad_83cc_b152cd2e198e" />
+        <ComponentRef Id="_y_self.jpg_9dcd0055_72b3_4d01_bc30_219adc6f3611" />
+        <ComponentRef Id="_z_self.jpg_3bd124e5_0aa1_47e7_9b5c_da35fd20fdb5" />
+        <ComponentRef Id="_resources_app_chunk_KTBTIYDU.js_6ab6b745_553c_4443_9bf0_3b429506b8ef" />
+        <ComponentRef Id="_chunk_KTBTIYDU.js.LEGAL.txt_48bb5397_5d9e_46a2_8ce4_25dca4d6f08a" />
+        <ComponentRef Id="_chunk_KTBTIYDU.js.map_4bb0c5c8_93fb_410a_943a_020dfa41c097" />
+        <ComponentRef Id="_resources_app_index.html_df9d47a6_901a_4d69_8b48_ccc22074f191" />
+        <ComponentRef Id="_resources_app_index.js_a902af31_8159_423c_9acf_8bcc3f3247f1" />
+        <ComponentRef Id="_resources_app_index.js.LEGAL.txt_ad758b8a_d520_4f09_996b_627f7a5889e0" />
+        <ComponentRef Id="_resources_app_index.js.map_4d806270_2a3e_4621_baeb_5977f21f9efc" />
+        <ComponentRef Id="_resources_app_manifest.json_1935e6c6_616c_44d6_8f49_cd5a0b073451" />
+        <ComponentRef Id="_resources_app_package.json_973cdd6e_861b_4890_a9b5_73b52010a927" />
+        <ComponentRef Id="_LICENSE_ea7adc2a_6cfa_436a_a617_71c0c2986844" />
+        <ComponentRef Id="_LICENSES.chromium.html_7ba3c2a3_e9d0_42a7_a5d2_b7b2a2a81a7d" />
+        <ComponentRef Id="_chrome_100_percent.pak_b6536a6d_9d11_44c9_bdb4_50abfb84567c" />
+        <ComponentRef Id="_chrome_200_percent.pak_b4e50c6f_c1cb_48ae_a41b_6e104e4c9fbf" />
+        <ComponentRef Id="_d3dcompiler_47.dll_04f69779_03dd_4602_b90d_781fe6bddea9" />
+        <ComponentRef Id="_ffmpeg.dll_4634e4c2_ff0d_40b7_8a96_cd2e9aa3871a" />
+        <ComponentRef Id="_icudtl.dat_559eb37d_ee1d_4126_afe6_45ddae096a52" />
+        <ComponentRef Id="_indian_sign_language_learning_app._214d3d1c_ddbe_44d9_b143_14dfc201e568" />
+        <ComponentRef Id="_libEGL.dll_8b67fa73_a6d6_4b7d_9320_90f62b2de980" />
+        <ComponentRef Id="_libGLESv2.dll_0b9e2b9c_2723_4cb7_9e00_8a931e01ef00" />
+        <ComponentRef Id="_resources.pak_fc78d35f_1364_4af6_9e1d_2358696d4078" />
+        <ComponentRef Id="_snapshot_blob.bin_327f3f95_af21_4d25_a07c_8c1522c5ecc5" />
+        <ComponentRef Id="_v8_context_snapshot.bin_b63f84c0_1f7d_4e73_910e_a3f40ff426b4" />
+        <ComponentRef Id="_version_aaecda4a_945b_4f00_bb61_990903acd817" />
+        <ComponentRef Id="_vk_swiftshader.dll_de6a08dc_9948_44de_809d_714315a693a6" />
+        <ComponentRef Id="_vk_swiftshader_icd.json_b6d24d8f_2ddc_475b_9517_b5224ac3edb1" />
+        <ComponentRef Id="_vulkan_1.dll_511c063e_dba1_42e7_8128_f320b4ec2388" />
+        <ComponentRef Id="_indian_sign_language_learning_app._5c7008be_2770_4c56_a8b2_8ba1d5c38dbb" />
+        <ComponentRef Id="_.installInfo.json_1765896e_eeeb_451e_b3e6_201119b67b9d" />
+        <ComponentRef Id="RegistryInstallPath" />
+        <ComponentRef Id="UninstallDisplayName" />
+        <ComponentRef Id="UninstallPublisher" />
+        <ComponentRef Id="UninstallDisplayVersion" />
+        <ComponentRef Id="UninstallModifyString" />
+        <ComponentRef Id="UninstallString" />
+        <ComponentRef Id="UninstallDisplayIcon" />
+        <ComponentRef Id="ApplicationShortcut" />
+        <ComponentRef Id="DesktopShortcut" />
+        <ComponentRef Id="PurgeOnUninstall" />
+      </Feature> 
+    </Feature> 
+  </Product>
+</Wix>
