@@ -49,8 +49,8 @@ const displaySign = () => {
         signNm = gebi("sign-name") as HTMLSpanElement,
         desc = gebi("sign-description") as HTMLParagraphElement;
     // console.log(descriptionData, obj, currentSignID, imgSelf, imgCam, signNm, desc);
-    imgSelf.src = "./../../Resources/images/signs/self/" + selectedSign + "-self.jpg";
-    imgCam.src = "./../../Resources/images/signs/cam/" + selectedSign + "-cam.jpg";
+    imgSelf.src = "./../../Resources/images/signs/self/" + selectedSign.toLowerCase() + "-self.jpg";
+    imgCam.src = "./../../Resources/images/signs/cam/" + selectedSign.toLowerCase() + "-cam.jpg";
     signNm.innerHTML = selectedSign.replace("_", "");
     desc.innerHTML = obj.desc;
 };
